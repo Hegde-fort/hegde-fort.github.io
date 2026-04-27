@@ -33,9 +33,6 @@ const site = defineCollection({
       address: z.string().optional(),
       officeHours: z.string().optional(),
     }).optional(),
-    social: z.object({
-      github: z.string().url().optional(),
-    }).optional(),
   }),
 });
 

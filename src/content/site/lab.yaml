@@ -50,5 +50,5 @@ contact:
   officeHours: ""
 
 # ── Social / external links (shown in the footer) ─────────────
-social:
-  github: "TODO"
+# social:
+#   github: "https://github.com/Hegde-fort"   # uncomment to show a GitHub link in the footer

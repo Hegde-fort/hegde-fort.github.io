@@ -2,10 +2,9 @@
 interface Props {
   labName: string;
   affiliations: string[];
-  github?: string;
 }
 
-const { labName, affiliations, github } = Astro.props;
+const { labName, affiliations } = Astro.props;
 const currentYear = new Date().getFullYear();
 ---
 
@@ -16,12 +15,6 @@ const currentYear = new Date().getFullYear();
     {affiliations.map(a => (
       <p class="affiliation">{a}</p>
     ))}
-
-    <div class="footer-links">
-      {github && (
-        <a href={github} target="_blank" rel="noopener">GitHub</a>
-      )}
-    </div>
 
     <p class="copyright">&copy; {currentYear} {labName}. All rights reserved.</p>
   </div>
@@ -51,17 +44,6 @@ const currentYear = new Date().getFullYear();
 
   .affiliation {
     margin: 0;
-    font-size: 0.9rem;
-  }
-
-  .footer-links {
-    display: flex;
-    gap: 1.5rem;
-    margin: 0.5rem 0;
-  }
-
-  .footer-links a {
-    text-decoration: none;
     font-size: 0.9rem;
   }
 
