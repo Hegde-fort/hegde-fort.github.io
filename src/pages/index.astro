@@ -36,27 +36,31 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
   </section>
 
   <!-- ── FEATURED PUBLICATIONS ─────────────────────────── -->
-  <section class="section">
-    <h2 class="section-title">Publications</h2>
-    <a class="btn-outline" href="/publications">Browse All</a>
-    <div class="pub-list">
-      {featuredPubs.map(pub => <PublicationCard pub={pub} />)}
+  <section class="section publication-section">
+    <div class="section-inner">
+      <h2 class="section-title">Publications</h2>
+      <a class="btn-outline" href="/publications">Browse All</a>
+      <div class="pub-list">
+        {featuredPubs.map(pub => <PublicationCard pub={pub} />)}
+      </div>
     </div>
   </section>
 
   <!-- ── JOIN CTA ───────────────────────────────────────── -->
   <section class="section join-section">
-    <div class="join-text">
-      <p class="label">Joining</p>
-      <h2>{lab.joining.headline}</h2>
-      {lab.joining.blurb && <p>{lab.joining.blurb}</p>}
-      <div class="join-buttons">
-        <a class="btn-outline" href="/team">Meet Our Team</a>
+    <div class="section-inner join-inner">
+      <div class="join-text">
+        <p class="label">Joining</p>
+        <h2>{lab.joining.headline}</h2>
+        {lab.joining.blurb && <p>{lab.joining.blurb}</p>}
+        <div class="join-buttons">
+          <a class="btn-outline" href="/team">Meet Our Team</a>
+        </div>
       </div>
-    </div>
 
-    <!-- TODO: replace with real lab group photo in public/images/ -->
-    <div class="join-photo-placeholder">Lab photo goes here</div>
+      <!-- TODO: replace with real lab group photo in public/images/ -->
+      <div class="join-photo-placeholder">Lab photo goes here</div>
+    </div>
   </section>
 
 </Layout>
@@ -67,7 +71,10 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
     align-items: start;
-    padding: 4rem 0;
+    /* pull hero up so it starts at the very top, behind the fixed nav */
+    margin-top: calc(-1 * var(--nav-height));
+    padding: calc(var(--nav-height) + 4rem) var(--content-pad-x) 4rem;
+    background: red;
   }
 
   .lab-label {
@@ -93,15 +100,24 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
   .news-preview h2 { margin-top: 0; }
 
   .section {
-    padding: var(--space-16) 0;
     border-top: 1px solid var(--color-border);
+  }
+
+  .section-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--space-16) var(--content-pad-x);
   }
 
   .section-title { margin: 0 0 0.5rem; }
 
+  .publication-section {
+    background: orange;
+  }
+
   .pub-list { margin-top: 1.5rem; }
 
-  .join-section {
+  .join-inner {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
@@ -138,6 +154,6 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
   }
 
   @media (max-width: 700px) {
-    .hero, .join-section { grid-template-columns: 1fr; }
+    .hero, .join-inner { grid-template-columns: 1fr; }
   }
 </style>

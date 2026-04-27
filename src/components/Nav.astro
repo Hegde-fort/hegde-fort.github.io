@@ -16,33 +16,45 @@ const navLinks = [
 const currentPath = Astro.url.pathname;
 ---
 
-<nav>
-  <a class="nav-logo" href="/">
-    <!-- TODO: replace with lab logo/wordmark image -->
-    <span>{labName}</span>
-  </a>
+<div class="nav-wrapper">
+  <nav>
+    <a class="nav-logo" href="/">
+      <!-- TODO: replace with lab logo/wordmark image -->
+      <span>{labName}</span>
+    </a>
 
-  <ul class="nav-links">
-    {navLinks.map(({ label, href }) => (
-      <li>
-        <a
-          href={href}
-          class:list={['nav-link', { active: currentPath.startsWith(href) }]}
-        >
-          {label}
-        </a>
-      </li>
-    ))}
-  </ul>
-</nav>
+    <ul class="nav-links">
+      {navLinks.map(({ label, href }) => (
+        <li>
+          <a
+            href={href}
+            class:list={['nav-link', { active: currentPath.startsWith(href) }]}
+          >
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</div>
 
 <style>
+  .nav-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    height: var(--nav-height);
+    background: transparent;
+  }
+
   nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 var(--content-pad-x);
-    height: var(--nav-height);
+    height: 100%;
     max-width: var(--max-width);
     margin: 0 auto;
     width: 100%;
