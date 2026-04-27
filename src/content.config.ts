@@ -2,6 +2,44 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 // ------------------------------------------------------------------
+// SITE CONFIG
+// src/content/site/lab.yaml — single source of truth for all
+// lab-wide content: name, description, hero, about, affiliations, etc.
+// ------------------------------------------------------------------
+const site = defineCollection({
+  loader: glob({ base: './src/content/site', pattern: '**/*.{yaml,yml}' }),
+  schema: z.object({
+    name: z.string(),
+    fullName: z.string(),
+    description: z.string(),
+    hero: z.object({
+      headline: z.string(),
+      description: z.string(),
+    }),
+    about: z.object({
+      tagline: z.string().optional(),
+      mission: z.string().optional(),
+    }),
+    researchAreas: z.array(z.object({
+      name: z.string(),
+      description: z.string(),
+    })).default([]),
+    affiliations: z.array(z.string()).default([]),
+    joining: z.object({
+      headline: z.string(),
+      blurb: z.string().optional(),
+    }),
+    contact: z.object({
+      address: z.string().optional(),
+      officeHours: z.string().optional(),
+    }).optional(),
+    social: z.object({
+      github: z.string().url().optional(),
+    }).optional(),
+  }),
+});
+
+// ------------------------------------------------------------------
 // TEAM
 // One .md file per person in src/content/team/
 // Files with draft: true are excluded from the site (use for examples/templates)
@@ -105,4 +143,4 @@ const news = defineCollection({
     }),
 });
 
-export const collections = { team, publications, projects, news };
+export const collections = { site, team, publications, projects, news };
