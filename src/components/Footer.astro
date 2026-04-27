@@ -22,17 +22,19 @@ const currentYear = new Date().getFullYear();
 
 <style>
   footer {
-    padding: 3rem 2rem;
+    padding: var(--space-12) var(--content-pad-x);
     margin-top: auto;
     text-align: center;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg-surface);
   }
 
   .footer-inner {
-    max-width: 800px;
+    max-width: var(--max-width);
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: var(--space-2);
     align-items: center;
   }
 
@@ -45,11 +47,12 @@ const currentYear = new Date().getFullYear();
   .affiliation {
     margin: 0;
     font-size: 0.9rem;
+    color: var(--color-text-muted);
   }
 
   .copyright {
-    margin: 0;
+    margin: var(--space-3) 0 0;
     font-size: 0.8rem;
-    opacity: 0.6;
+    color: var(--color-text-muted);
   }
 </style>

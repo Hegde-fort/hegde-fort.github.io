@@ -35,8 +35,8 @@ const { title, authors, venue, year, url, pdf, code, tags } = pub.data;
 
 <style>
   .pub-card {
-    padding: 1.25rem 0;
-    border-bottom: 1px solid #e5e7eb;
+    padding: var(--space-6) 0;
+    border-bottom: 1px solid var(--color-border);
   }
 
   .title {
@@ -51,7 +51,7 @@ const { title, authors, venue, year, url, pdf, code, tags } = pub.data;
   .authors, .venue {
     margin: 0 0 0.3rem;
     font-size: 0.88rem;
-    opacity: 0.75;
+    color: var(--color-text-muted);
   }
 
   .tags {
@@ -64,8 +64,9 @@ const { title, authors, venue, year, url, pdf, code, tags } = pub.data;
   .tag {
     font-size: 0.75rem;
     padding: 0.1rem 0.5rem;
-    border-radius: 999px;
-    background: #f3f4f6;
+    border-radius: var(--radius-full);
+    background: var(--color-bg-subtle);
+    border: 1px solid var(--color-border);
   }
 
   .links {
