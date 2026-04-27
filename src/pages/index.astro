@@ -2,7 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import PublicationCard from '../components/PublicationCard.astro';
 import NewsCard from '../components/NewsCard.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
+
+const lab = (await getEntry('site', 'lab'))!.data;
 
 const featuredPubs = (await getCollection('publications', p => !p.data.draft && p.data.featured))
   .sort((a, b) => b.data.year - a.data.year)
@@ -18,28 +20,16 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
   <!-- ── HERO ───────────────────────────────────────────── -->
   <section class="hero">
     <div class="hero-text">
-      <p class="lab-label">The FORT Lab</p>
-      <h1>
-        <!-- TODO: confirm headline wording -->
-        Foundations of Robust and Trustworthy Algorithms for Machine Learning
-      </h1>
-      <p class="hero-sub">
-        <!-- TODO: 2–3 sentence lab description -->
-        Pursuing research in the analysis and design of algorithms for ensuring
-        privacy, robustness, and fairness in machine learning and artificial
-        intelligence.
-      </p>
+      <p class="lab-label">{lab.name}</p>
+      <h1>{lab.hero.headline}</h1>
+      <p class="hero-sub">{lab.hero.description}</p>
       <a class="btn" href="/about">Learn More</a>
     </div>
 
-    <!-- TODO: swap this div for a real hero image/graphic -->
     <div class="hero-aside">
-      <!-- Latest news preview pulled from content -->
       <div class="news-preview">
         <h2>News</h2>
-        {featuredNews.map(item => (
-          <NewsCard item={item} />
-        ))}
+        {featuredNews.map(item => <NewsCard item={item} />)}
         <a class="btn-outline" href="/news">Browse All News</a>
       </div>
     </div>
@@ -48,11 +38,7 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
   <!-- ── FEATURED PUBLICATIONS ─────────────────────────── -->
   <section class="section">
     <h2 class="section-title">Publications</h2>
-    <p class="section-sub">
-      <!-- TODO: optional one-liner about research focus -->
-    </p>
     <a class="btn-outline" href="/publications">Browse All</a>
-
     <div class="pub-list">
       {featuredPubs.map(pub => <PublicationCard pub={pub} />)}
     </div>
@@ -62,24 +48,20 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
   <section class="section join-section">
     <div class="join-text">
       <p class="label">Joining</p>
-      <h2>Interested In Joining Our Team?</h2>
-      <p>
-        <!-- TODO: short joining blurb -->
-      </p>
+      <h2>{lab.joining.headline}</h2>
+      {lab.joining.blurb && <p>{lab.joining.blurb}</p>}
       <div class="join-buttons">
-        <a class="btn" href="mailto:lab@ualberta.ca">Contact Us</a>
         <a class="btn-outline" href="/team">Meet Our Team</a>
       </div>
     </div>
 
-    <!-- TODO: replace with real lab photo -->
+    <!-- TODO: replace with real lab group photo in public/images/ -->
     <div class="join-photo-placeholder">Lab photo goes here</div>
   </section>
 
 </Layout>
 
 <style>
-  /* Hero */
   .hero {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -110,18 +92,15 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
 
   .news-preview h2 { margin-top: 0; }
 
-  /* Shared section */
   .section {
     padding: 4rem 0;
     border-top: 1px solid #e5e7eb;
   }
 
   .section-title { margin: 0 0 0.5rem; }
-  .section-sub   { margin: 0 0 1rem; }
 
   .pub-list { margin-top: 1.5rem; }
 
-  /* Join */
   .join-section {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -157,7 +136,6 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
     font-size: 0.9rem;
   }
 
-  /* Buttons */
   .btn {
     display: inline-block;
     padding: 0.6rem 1.4rem;

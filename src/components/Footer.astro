@@ -1,23 +1,29 @@
 ---
+interface Props {
+  labName: string;
+  affiliations: string[];
+  github?: string;
+}
+
+const { labName, affiliations, github } = Astro.props;
 const currentYear = new Date().getFullYear();
 ---
 
 <footer>
   <div class="footer-inner">
-    <!-- TODO: add lab logo -->
-    <p class="lab-name">FORT Lab</p>
-    <p class="affiliation">
-      <!-- TODO: fill in correct department and university -->
-      Department of Computing Science · University of Alberta
-    </p>
+    <p class="lab-name">{labName}</p>
+
+    {affiliations.map(a => (
+      <p class="affiliation">{a}</p>
+    ))}
 
     <div class="footer-links">
-      <!-- TODO: fill in real contact / social links -->
-      <a href="mailto:lab@ualberta.ca">Contact</a>
-      <a href="https://github.com/Hegde-fort" target="_blank" rel="noopener">GitHub</a>
+      {github && (
+        <a href={github} target="_blank" rel="noopener">GitHub</a>
+      )}
     </div>
 
-    <p class="copyright">&copy; {currentYear} FORT Lab. All rights reserved.</p>
+    <p class="copyright">&copy; {currentYear} {labName}. All rights reserved.</p>
   </div>
 </footer>
 
@@ -33,7 +39,7 @@ const currentYear = new Date().getFullYear();
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.4rem;
     align-items: center;
   }
 

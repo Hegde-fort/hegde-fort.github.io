@@ -1,10 +1,16 @@
 ---
+interface Props {
+  labName: string;
+}
+
+const { labName } = Astro.props;
+
 const navLinks = [
-  { label: 'About Us', href: '/about' },
-  { label: 'Team',     href: '/team' },
-  { label: 'Projects', href: '/projects' },
-  { label: 'Publications', href: '/publications' },
-  { label: 'News',     href: '/news' },
+  { label: 'About Us',      href: '/about' },
+  { label: 'Team',          href: '/team' },
+  { label: 'Projects',      href: '/projects' },
+  { label: 'Publications',  href: '/publications' },
+  { label: 'News',          href: '/news' },
 ];
 
 const currentPath = Astro.url.pathname;
@@ -12,8 +18,8 @@ const currentPath = Astro.url.pathname;
 
 <nav>
   <a class="nav-logo" href="/">
-    <!-- TODO: replace with lab logo/wordmark -->
-    <span>FORT Lab</span>
+    <!-- TODO: replace with lab logo/wordmark image -->
+    <span>{labName}</span>
   </a>
 
   <ul class="nav-links">

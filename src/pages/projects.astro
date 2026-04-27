@@ -5,9 +5,20 @@ import { getCollection } from 'astro:content';
 
 const allProjects = await getCollection('projects', p => !p.data.draft);
 
-const active    = allProjects.filter(p => p.data.status === 'active')   .sort((a, b) => a.data.order - b.data.order);
-const completed = allProjects.filter(p => p.data.status === 'completed').sort((a, b) => a.data.order - b.data.order);
-const archived  = allProjects.filter(p => p.data.status === 'archived') .sort((a, b) => a.data.order - b.data.order);
+// Active projects: most recently started first
+// Completed/archived: most recently ended first, falling back to startDate
+const byStartDesc = (a: typeof allProjects[0], b: typeof allProjects[0]) =>
+  b.data.startDate.getTime() - a.data.startDate.getTime();
+
+const byEndDesc = (a: typeof allProjects[0], b: typeof allProjects[0]) => {
+  const aEnd = a.data.endDate ?? a.data.startDate;
+  const bEnd = b.data.endDate ?? b.data.startDate;
+  return bEnd.getTime() - aEnd.getTime();
+};
+
+const active    = allProjects.filter(p => p.data.status === 'active')   .sort(byStartDesc);
+const completed = allProjects.filter(p => p.data.status === 'completed').sort(byEndDesc);
+const archived  = allProjects.filter(p => p.data.status === 'archived') .sort(byEndDesc);
 ---
 
 <Layout title="Projects" description="Research projects from the FORT Lab.">

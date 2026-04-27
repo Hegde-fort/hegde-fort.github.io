@@ -1,15 +1,18 @@
 ---
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import { getEntry } from 'astro:content';
 
 interface Props {
   title: string;
   description?: string;
 }
 
+const lab = (await getEntry('site', 'lab'))!.data;
+
 const {
   title,
-  description = 'FORT Lab — Foundations of Robust and Trustworthy Algorithms for Machine Learning',
+  description = lab.description,
 } = Astro.props;
 ---
 
@@ -21,14 +24,18 @@ const {
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title} | FORT Lab</title>
+    <title>{title} | {lab.name}</title>
   </head>
   <body>
-    <Nav />
+    <Nav labName={lab.name} />
     <main>
       <slot />
     </main>
-    <Footer />
+    <Footer
+      labName={lab.name}
+      affiliations={lab.affiliations}
+      github={lab.social?.github}
+    />
   </body>
 </html>
 
