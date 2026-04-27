@@ -19,18 +19,20 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
 
   <!-- ── HERO ───────────────────────────────────────────── -->
   <section class="hero">
-    <div class="hero-text">
-      <p class="lab-label">{lab.name}</p>
-      <h1>{lab.hero.headline}</h1>
-      <p class="hero-sub">{lab.hero.description}</p>
-      <a class="btn" href="/about">Learn More</a>
-    </div>
+    <div class="hero-inner">
+      <div class="hero-text">
+        <p class="lab-label">{lab.name}</p>
+        <h1>{lab.hero.headline}</h1>
+        <p class="hero-sub">{lab.hero.description}</p>
+        <a class="btn" href="/about">Learn More</a>
+      </div>
 
-    <div class="hero-aside">
-      <div class="news-preview">
-        <h2>News</h2>
-        {featuredNews.map(item => <NewsCard item={item} />)}
-        <a class="btn-outline" href="/news">Browse All News</a>
+      <div class="hero-aside">
+        <div class="news-preview">
+          <h2>News</h2>
+          {featuredNews.map(item => <NewsCard item={item} />)}
+          <a class="btn-outline" href="/news">Browse All News</a>
+        </div>
       </div>
     </div>
   </section>
@@ -67,14 +69,21 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
 
 <style>
   .hero {
+    /* pull hero up so it starts at the very top, behind the fixed nav */
+    margin-top: calc(-1 * var(--nav-height));
+    padding-top: calc(var(--nav-height) + 4rem);
+    padding-bottom: 4rem;
+    background: red;
+  }
+
+  .hero-inner {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
     align-items: start;
-    /* pull hero up so it starts at the very top, behind the fixed nav */
-    margin-top: calc(-1 * var(--nav-height));
-    padding: calc(var(--nav-height) + 4rem) var(--content-pad-x) 4rem;
-    background: red;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--content-pad-x);
   }
 
   .lab-label {
@@ -154,6 +163,6 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
   }
 
   @media (max-width: 700px) {
-    .hero, .join-inner { grid-template-columns: 1fr; }
+    .hero-inner, .join-inner { grid-template-columns: 1fr; }
   }
 </style>
