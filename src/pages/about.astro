@@ -1,0 +1,82 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="About Us"
+  description="About the FORT Lab — our mission, research areas, and affiliations."
+>
+
+  <section class="page-header">
+    <h1>About Us</h1>
+    <p class="subtitle">
+      <!-- TODO: one-sentence lab tagline -->
+    </p>
+  </section>
+
+  <!-- ── MISSION ──────────────────────────────────────── -->
+  <section class="section">
+    <h2>Our Mission</h2>
+    <p>
+      <!-- TODO: 2–3 paragraph mission statement -->
+    </p>
+  </section>
+
+  <!-- ── RESEARCH AREAS ───────────────────────────────── -->
+  <section class="section">
+    <h2>Research Areas</h2>
+    <ul class="research-areas">
+      <!-- TODO: list the main research themes -->
+      <li><strong>Privacy</strong> — differential privacy, private learning</li>
+      <li><strong>Robustness</strong> — adversarial robustness, distribution shift</li>
+      <li><strong>Fairness</strong> — algorithmic fairness, bias mitigation</li>
+    </ul>
+  </section>
+
+  <!-- ── AFFILIATIONS ──────────────────────────────────── -->
+  <section class="section">
+    <h2>Affiliations</h2>
+    <ul class="affiliations">
+      <!-- TODO: verify and expand -->
+      <li>Department of Computing Science · University of Alberta</li>
+      <li>AMII (Alberta Machine Intelligence Institute)</li>
+    </ul>
+  </section>
+
+  <!-- ── CONTACT ───────────────────────────────────────── -->
+  <section class="section">
+    <h2>Contact</h2>
+    <p>
+      <!-- TODO: office address, email, etc. -->
+    </p>
+  </section>
+
+</Layout>
+
+<style>
+  .page-header {
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .page-header h1 { margin: 0 0 0.5rem; }
+
+  .subtitle {
+    font-size: 1.1rem;
+    margin: 0;
+    opacity: 0.7;
+  }
+
+  .section {
+    padding: 2.5rem 0;
+    border-bottom: 1px solid #e5e7eb;
+    max-width: 720px;
+  }
+
+  .section h2 { margin-top: 0; }
+
+  .research-areas, .affiliations {
+    padding-left: 1.25rem;
+    line-height: 2;
+  }
+</style>

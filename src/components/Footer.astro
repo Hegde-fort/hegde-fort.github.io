@@ -1,0 +1,67 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer>
+  <div class="footer-inner">
+    <!-- TODO: add lab logo -->
+    <p class="lab-name">FORT Lab</p>
+    <p class="affiliation">
+      <!-- TODO: fill in correct department and university -->
+      Department of Computing Science · University of Alberta
+    </p>
+
+    <div class="footer-links">
+      <!-- TODO: fill in real contact / social links -->
+      <a href="mailto:lab@ualberta.ca">Contact</a>
+      <a href="https://github.com/Hegde-fort" target="_blank" rel="noopener">GitHub</a>
+    </div>
+
+    <p class="copyright">&copy; {currentYear} FORT Lab. All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  footer {
+    padding: 3rem 2rem;
+    margin-top: auto;
+    text-align: center;
+  }
+
+  .footer-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .lab-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin: 0;
+  }
+
+  .affiliation {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+    margin: 0.5rem 0;
+  }
+
+  .footer-links a {
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+
+  .copyright {
+    margin: 0;
+    font-size: 0.8rem;
+    opacity: 0.6;
+  }
+</style>

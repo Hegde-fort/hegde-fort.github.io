@@ -1,0 +1,77 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const allProjects = await getCollection('projects', p => !p.data.draft);
+
+const active    = allProjects.filter(p => p.data.status === 'active')   .sort((a, b) => a.data.order - b.data.order);
+const completed = allProjects.filter(p => p.data.status === 'completed').sort((a, b) => a.data.order - b.data.order);
+const archived  = allProjects.filter(p => p.data.status === 'archived') .sort((a, b) => a.data.order - b.data.order);
+---
+
+<Layout title="Projects" description="Research projects from the FORT Lab.">
+
+  <section class="page-header">
+    <h1>Projects</h1>
+    <p class="subtitle">
+      <!-- TODO: optional one-liner about research projects -->
+    </p>
+  </section>
+
+  {active.length > 0 && (
+    <section class="section">
+      <h2>Active Projects</h2>
+      <div class="project-grid">
+        {active.map(project => <ProjectCard project={project} />)}
+      </div>
+    </section>
+  )}
+
+  {completed.length > 0 && (
+    <section class="section">
+      <h2>Completed Projects</h2>
+      <div class="project-grid">
+        {completed.map(project => <ProjectCard project={project} />)}
+      </div>
+    </section>
+  )}
+
+  {archived.length > 0 && (
+    <section class="section">
+      <h2>Archived</h2>
+      <div class="project-grid">
+        {archived.map(project => <ProjectCard project={project} />)}
+      </div>
+    </section>
+  )}
+
+</Layout>
+
+<style>
+  .page-header {
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .page-header h1 { margin: 0 0 0.5rem; }
+
+  .subtitle {
+    margin: 0;
+    opacity: 0.7;
+  }
+
+  .section {
+    padding: 2.5rem 0;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .section h2 { margin-top: 0; }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+</style>

@@ -1,0 +1,60 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import NewsCard from '../../components/NewsCard.astro';
+import { getCollection } from 'astro:content';
+
+const allNews = (await getCollection('news', n => !n.data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const allTags = [...new Set(allNews.flatMap(n => n.data.tags))].sort();
+---
+
+<Layout title="News" description="Latest news and updates from the FORT Lab.">
+
+  <section class="page-header">
+    <h1>News</h1>
+  </section>
+
+  <!-- TODO: wire up tag filter with a small JS island if desired -->
+  {allTags.length > 0 && (
+    <div class="tag-filter">
+      {allTags.map(tag => (
+        <span class="tag">{tag}</span>
+      ))}
+    </div>
+  )}
+
+  <div class="news-list">
+    {allNews.map(item => <NewsCard item={item} />)}
+  </div>
+
+</Layout>
+
+<style>
+  .page-header {
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .page-header h1 { margin: 0; }
+
+  .tag-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 1.5rem 0;
+  }
+
+  .tag {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    background: #f3f4f6;
+    cursor: pointer;
+  }
+
+  .news-list {
+    margin-top: 1rem;
+    max-width: 720px;
+  }
+</style>

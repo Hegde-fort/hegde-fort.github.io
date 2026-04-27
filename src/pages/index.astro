@@ -1,11 +1,186 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import PublicationCard from '../components/PublicationCard.astro';
+import NewsCard from '../components/NewsCard.astro';
+import { getCollection } from 'astro:content';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const featuredPubs = (await getCollection('publications', p => !p.data.draft && p.data.featured))
+  .sort((a, b) => b.data.year - a.data.year)
+  .slice(0, 3);
+
+const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.featured))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Home">
+
+  <!-- ── HERO ───────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-text">
+      <p class="lab-label">The FORT Lab</p>
+      <h1>
+        <!-- TODO: confirm headline wording -->
+        Foundations of Robust and Trustworthy Algorithms for Machine Learning
+      </h1>
+      <p class="hero-sub">
+        <!-- TODO: 2–3 sentence lab description -->
+        Pursuing research in the analysis and design of algorithms for ensuring
+        privacy, robustness, and fairness in machine learning and artificial
+        intelligence.
+      </p>
+      <a class="btn" href="/about">Learn More</a>
+    </div>
+
+    <!-- TODO: swap this div for a real hero image/graphic -->
+    <div class="hero-aside">
+      <!-- Latest news preview pulled from content -->
+      <div class="news-preview">
+        <h2>News</h2>
+        {featuredNews.map(item => (
+          <NewsCard item={item} />
+        ))}
+        <a class="btn-outline" href="/news">Browse All News</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FEATURED PUBLICATIONS ─────────────────────────── -->
+  <section class="section">
+    <h2 class="section-title">Publications</h2>
+    <p class="section-sub">
+      <!-- TODO: optional one-liner about research focus -->
+    </p>
+    <a class="btn-outline" href="/publications">Browse All</a>
+
+    <div class="pub-list">
+      {featuredPubs.map(pub => <PublicationCard pub={pub} />)}
+    </div>
+  </section>
+
+  <!-- ── JOIN CTA ───────────────────────────────────────── -->
+  <section class="section join-section">
+    <div class="join-text">
+      <p class="label">Joining</p>
+      <h2>Interested In Joining Our Team?</h2>
+      <p>
+        <!-- TODO: short joining blurb -->
+      </p>
+      <div class="join-buttons">
+        <a class="btn" href="mailto:lab@ualberta.ca">Contact Us</a>
+        <a class="btn-outline" href="/team">Meet Our Team</a>
+      </div>
+    </div>
+
+    <!-- TODO: replace with real lab photo -->
+    <div class="join-photo-placeholder">Lab photo goes here</div>
+  </section>
+
 </Layout>
+
+<style>
+  /* Hero */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+    padding: 4rem 0;
+  }
+
+  .lab-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 0.5rem;
+  }
+
+  .hero-text h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    line-height: 1.2;
+    margin: 0 0 1rem;
+  }
+
+  .hero-sub {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin: 0 0 1.5rem;
+  }
+
+  .news-preview h2 { margin-top: 0; }
+
+  /* Shared section */
+  .section {
+    padding: 4rem 0;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .section-title { margin: 0 0 0.5rem; }
+  .section-sub   { margin: 0 0 1rem; }
+
+  .pub-list { margin-top: 1.5rem; }
+
+  /* Join */
+  .join-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 0.25rem;
+  }
+
+  .join-text h2 { margin: 0 0 1rem; }
+
+  .join-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+
+  .join-photo-placeholder {
+    background: #e5e7eb;
+    border-radius: 12px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+    font-size: 0.9rem;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-block;
+    padding: 0.6rem 1.4rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    background: #111;
+    color: #fff;
+  }
+
+  .btn-outline {
+    display: inline-block;
+    padding: 0.6rem 1.4rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    border: 2px solid #111;
+    color: #111;
+  }
+
+  @media (max-width: 700px) {
+    .hero, .join-section { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,88 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PublicationCard from '../components/PublicationCard.astro';
+import { getCollection } from 'astro:content';
+
+const allPubs = await getCollection('publications', p => !p.data.draft);
+
+// Sort newest first, then group by year
+const sorted = allPubs.sort((a, b) => b.data.year - a.data.year);
+
+const years = [...new Set(sorted.map(p => p.data.year))];
+const byYear = years.map(year => ({
+  year,
+  pubs: sorted.filter(p => p.data.year === year),
+}));
+
+// Collect all unique tags for a future filter UI
+const allTags = [...new Set(allPubs.flatMap(p => p.data.tags))].sort();
+---
+
+<Layout title="Publications" description="Research publications from the FORT Lab.">
+
+  <section class="page-header">
+    <h1>Publications</h1>
+    <p class="subtitle">
+      <!-- TODO: optional note (e.g. "* = equal contribution") -->
+    </p>
+  </section>
+
+  <!-- TODO: wire up tag filter with a small JS island if desired -->
+  {allTags.length > 0 && (
+    <div class="tag-filter">
+      {allTags.map(tag => (
+        <span class="tag">{tag}</span>
+      ))}
+    </div>
+  )}
+
+  {byYear.map(({ year, pubs }) => (
+    <section class="year-group">
+      <h2 class="year-title">{year}</h2>
+      <div class="pub-list">
+        {pubs.map(pub => <PublicationCard pub={pub} />)}
+      </div>
+    </section>
+  ))}
+
+</Layout>
+
+<style>
+  .page-header {
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .page-header h1 { margin: 0 0 0.5rem; }
+
+  .subtitle {
+    margin: 0;
+    opacity: 0.7;
+    font-size: 0.9rem;
+  }
+
+  .tag-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 1.5rem 0;
+  }
+
+  .tag {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    background: #f3f4f6;
+    cursor: pointer;
+  }
+
+  .year-group {
+    padding: 2rem 0;
+  }
+
+  .year-title {
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+    color: #6b7280;
+  }
+</style>

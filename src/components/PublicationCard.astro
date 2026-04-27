@@ -1,0 +1,82 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  pub: CollectionEntry<'publications'>;
+}
+
+const { pub } = Astro.props;
+const { title, authors, venue, year, url, pdf, code, tags } = pub.data;
+---
+
+<article class="pub-card">
+  <h3 class="title">
+    {url
+      ? <a href={url} target="_blank" rel="noopener">{title}</a>
+      : title
+    }
+  </h3>
+
+  <p class="authors">{authors.join(', ')}</p>
+  <p class="venue">{venue} · {year}</p>
+
+  {tags.length > 0 && (
+    <div class="tags">
+      {tags.map(tag => <span class="tag">{tag}</span>)}
+    </div>
+  )}
+
+  <div class="links">
+    {url  && <a href={url}  target="_blank" rel="noopener">Paper</a>}
+    {pdf  && <a href={pdf}  target="_blank" rel="noopener">PDF</a>}
+    {code && <a href={code} target="_blank" rel="noopener">Code</a>}
+  </div>
+</article>
+
+<style>
+  .pub-card {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .title {
+    margin: 0 0 0.4rem;
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .title a { text-decoration: none; }
+  .title a:hover { text-decoration: underline; }
+
+  .authors, .venue {
+    margin: 0 0 0.3rem;
+    font-size: 0.88rem;
+    opacity: 0.75;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0.5rem 0;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    background: #f3f4f6;
+  }
+
+  .links {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .links a {
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+</style>

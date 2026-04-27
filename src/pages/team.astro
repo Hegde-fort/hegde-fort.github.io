@@ -1,0 +1,110 @@
+---
+import Layout from '../layouts/Layout.astro';
+import TeamCard from '../components/TeamCard.astro';
+import { getCollection } from 'astro:content';
+
+const allMembers = await getCollection('team', m => !m.data.draft);
+
+// Display order for role sections (most senior first)
+const roleOrder = [
+  'Faculty',
+  'Postdoctoral Researcher',
+  'PhD Student',
+  "Master's Student",
+  'Undergraduate Student',
+  'Research Assistant',
+  'Visiting Researcher',
+  'Other',
+] as const;
+
+const alphabetical = (a: { data: { name: string } }, b: { data: { name: string } }) =>
+  a.data.name.localeCompare(b.data.name);
+
+const active = allMembers.filter(m => !m.data.alumni);
+const alumni = allMembers.filter(m =>  m.data.alumni);
+
+// Group active members by role, sorted alphabetically within each group
+const activeGrouped = roleOrder
+  .map(role => ({
+    role,
+    members: active.filter(m => m.data.role === role).sort(alphabetical),
+  }))
+  .filter(g => g.members.length > 0);
+
+// Alumni grouped the same way, then alphabetically within each role
+const alumniGrouped = roleOrder
+  .map(role => ({
+    role,
+    members: alumni.filter(m => m.data.role === role).sort(alphabetical),
+  }))
+  .filter(g => g.members.length > 0);
+---
+
+<Layout title="Team" description="Meet the members of the FORT Lab.">
+
+  <section class="page-header">
+    <h1>Team</h1>
+  </section>
+
+  {activeGrouped.map(({ role, members }) => (
+    <section class="role-group">
+      <h2 class="role-title">{role}</h2>
+      <div class="member-grid">
+        {members.map(member => <TeamCard member={member} />)}
+      </div>
+    </section>
+  ))}
+
+  {alumniGrouped.length > 0 && (
+    <section class="role-group alumni-section">
+      <h2 class="role-title">Alumni</h2>
+      {alumniGrouped.map(({ role, members }) => (
+        <div class="alumni-role-group">
+          <h3 class="alumni-role-title">Former {role}</h3>
+          <div class="member-grid">
+            {members.map(member => <TeamCard member={member} />)}
+          </div>
+        </div>
+      ))}
+    </section>
+  )}
+
+</Layout>
+
+<style>
+  .page-header {
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .page-header h1 { margin: 0; }
+
+  .role-group {
+    padding: 2.5rem 0;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .role-title {
+    margin: 0 0 1.5rem;
+    font-size: 1.15rem;
+  }
+
+  .member-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+
+  .alumni-section { }
+
+  .alumni-role-group { margin-bottom: 2rem; }
+
+  .alumni-role-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    opacity: 0.6;
+    margin: 0 0 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+</style>

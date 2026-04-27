@@ -1,0 +1,97 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  item: CollectionEntry<'news'>;
+}
+
+const { item } = Astro.props;
+const { title, date, summary, image, externalUrl, tags } = item.data;
+
+const href = externalUrl ?? `/news/${item.id}`;
+const isExternal = !!externalUrl;
+
+const formattedDate = date.toLocaleDateString('en-CA', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<article class="news-card">
+  {image && (
+    <a href={href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener' : undefined}>
+      <img class="news-image" src={image.src} alt={title} />
+    </a>
+  )}
+
+  <div class="news-body">
+    <time datetime={date.toISOString()} class="date">{formattedDate}</time>
+    <h3 class="title">
+      <a
+        href={href}
+        target={isExternal ? '_blank' : undefined}
+        rel={isExternal ? 'noopener' : undefined}
+      >
+        {title}
+      </a>
+    </h3>
+    <p class="summary">{summary}</p>
+
+    {tags.length > 0 && (
+      <div class="tags">
+        {tags.map(tag => <span class="tag">{tag}</span>)}
+      </div>
+    )}
+  </div>
+</article>
+
+<style>
+  .news-card {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 1.25rem 0;
+  }
+
+  .news-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+  }
+
+  .date {
+    font-size: 0.8rem;
+    opacity: 0.6;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .title {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  .title a { text-decoration: none; }
+  .title a:hover { text-decoration: underline; }
+
+  .summary {
+    margin: 0 0 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    background: #f3f4f6;
+  }
+</style>
