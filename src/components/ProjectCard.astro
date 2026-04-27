@@ -6,7 +6,12 @@ interface Props {
 }
 
 const { project } = Astro.props;
-const { title, summary, tags, status, image, url } = project.data;
+const { title, summary, tags, status, image, url, startDate, endDate } = project.data;
+
+const fmt = (d: Date) => d.toLocaleDateString('en-CA', { year: 'numeric', month: 'short' });
+const dateRange = endDate
+  ? `${fmt(startDate)} – ${fmt(endDate)}`
+  : `${fmt(startDate)} – present`;
 ---
 
 <article class="project-card">
@@ -22,6 +27,7 @@ const { title, summary, tags, status, image, url } = project.data;
       <span class:list={['status-badge', status]}>{status}</span>
     </div>
 
+    <p class="date-range">{dateRange}</p>
     <p class="summary">{summary}</p>
 
     {tags.length > 0 && (
@@ -77,6 +83,12 @@ const { title, summary, tags, status, image, url } = project.data;
   .status-badge.active    { background: #d1fae5; color: #065f46; }
   .status-badge.completed { background: #e0e7ff; color: #3730a3; }
   .status-badge.archived  { background: #f3f4f6; color: #6b7280; }
+
+  .date-range {
+    margin: 0 0 0.5rem;
+    font-size: 0.8rem;
+    opacity: 0.55;
+  }
 
   .summary {
     margin: 0 0 0.75rem;
