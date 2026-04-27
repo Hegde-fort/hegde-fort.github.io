@@ -1,0 +1,54 @@
+# ---------------------------------------------------------------
+# FORT Lab: site-wide content
+# This is the single file to update for anything that appears
+# across multiple pages: lab name, description, about content,
+# affiliations, joining info, and social links.
+# ---------------------------------------------------------------
+
+name: "FORT Lab"
+fullName: "Foundations of Robust and Trustworthy Algorithms for Machine Learning"
+
+# Used as the default meta description and the hero subtitle
+description: "Pursuing research in the analysis and design of algorithms for ensuring privacy, robustness, and fairness in machine learning and artificial intelligence. Our goal is to design algorithms for settings that are practical but not well investigated in research literature."
+
+# ── Home page hero ────────────────────────────────────────────
+hero:
+  headline: "Foundations of Robust and Trustworthy Algorithms for Machine Learning"
+  description: "Pursuing research in the analysis and design of algorithms for ensuring privacy, robustness, and fairness in machine learning and artificial intelligence."
+
+# ── About page ────────────────────────────────────────────────
+about:
+  tagline: "TODO: one-sentence tagline for the lab."
+  # Multi-paragraph mission statement. Use | to preserve line breaks.
+  mission: |
+    TODO: first paragraph of mission statement.
+
+    TODO: second paragraph.
+
+# ── Research areas (shown on the About page) ──────────────────
+researchAreas:
+  - name: "Privacy"
+    description: "Differential privacy, private learning, and data protection."
+  - name: "Robustness"
+    description: "Adversarial robustness, distribution shift, and reliable AI."
+  - name: "Fairness"
+    description: "Algorithmic fairness, bias mitigation, and equitable outcomes."
+
+# ── Affiliations (shown on the About page and footer) ─────────
+affiliations:
+  - "Department of Computing Science, University of Alberta"
+  - "TODO"
+
+# ── Joining section (shown on the home page) ──────────────────
+joining:
+  headline: "Interested In Joining Our Team?"
+  blurb: "TODO: short blurb about what you look for in prospective students/researchers."
+
+# ── Contact (shown on the About page) ─────────────────────────
+contact:
+  address: "TODO"
+  officeHours: ""
+
+# ── Social / external links (shown in the footer) ─────────────
+social:
+  github: "TODO"
