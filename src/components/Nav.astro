@@ -9,7 +9,6 @@ const { labName } = Astro.props;
 
 const lab = (await getEntry('site', 'lab'))!.data;
 
-// Fall back to hardcoded list if nav hasn't been defined in lab.yaml yet
 const defaultLinks = [
   { label: 'About Us',     href: '/about',        hidden: false },
   { label: 'Team',         href: '/team',         hidden: false },
