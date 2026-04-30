@@ -1,0 +1,39 @@
+---
+interface Props {
+  message?: string;
+}
+
+const { message = "This page is still under construction — check back soon!" } = Astro.props;
+---
+
+<div class="empty-state">
+  <span class="empty-icon" aria-hidden="true">🚧</span>
+  <p class="empty-title">Coming soon</p>
+  <p class="empty-body">{message}</p>
+</div>
+
+<style>
+  .empty-state {
+    padding: var(--space-16) 0;
+    text-align: center;
+  }
+
+  .empty-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: var(--space-4);
+  }
+
+  .empty-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 var(--space-2);
+  }
+
+  .empty-body {
+    font-size: 0.95rem;
+    color: rgba(15, 23, 42, 0.5);
+    margin: 0;
+  }
+</style>

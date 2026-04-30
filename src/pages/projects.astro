@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import EmptyState from '../components/EmptyState.astro';
 import { getCollection } from 'astro:content';
 
 const allProjects = await getCollection('projects', p => !p.data.draft);
@@ -45,9 +46,7 @@ const groups = (
   <div class="content surface-light">
     <div class="section-inner">
 
-      {groups.length === 0 && (
-        <p class="empty">No projects to show yet — check back soon.</p>
-      )}
+      {groups.length === 0 && <EmptyState />}
 
       {groups.map(group => (
         <div class="group">
@@ -138,11 +137,6 @@ const groups = (
     gap: var(--space-5);
   }
 
-  .empty {
-    color: rgba(15, 23, 42, 0.45);
-    font-size: 0.95rem;
-    padding: var(--space-10) 0;
-  }
 
   @media (max-width: 640px) {
     .project-grid { grid-template-columns: 1fr; }

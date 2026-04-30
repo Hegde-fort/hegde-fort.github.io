@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import PublicationCard from '../components/PublicationCard.astro';
+import EmptyState from '../components/EmptyState.astro';
 import { getCollection } from 'astro:content';
 
 const allPubs = await getCollection('publications', p => !p.data.draft);
@@ -20,33 +21,43 @@ const total   = allPubs.length;
     </div>
   </section>
 
-  <!-- Year filter bar -->
-  <div class="filter-bar surface-light">
-    <div class="section-inner filter-inner">
-      <span class="filter-label">Filter by year</span>
-      <div class="year-pills" id="year-pills">
-        <button class="year-pill active" data-year="all">All</button>
-        {years.map(y => (
-          <button class="year-pill" data-year={String(y)}>{y}</button>
-        ))}
+  {allPubs.length === 0 ? (
+    <div class="content surface-light">
+      <div class="section-inner">
+        <EmptyState />
       </div>
     </div>
-  </div>
-
-  <div class="content surface-light">
-    <div class="section-inner">
-      {byYear.map(({ year, pubs }) => (
-        <div class="year-block" data-year-block={String(year)}>
-          <div class="year-marker">
-            <span class="year-num">{year}</span>
-          </div>
-          <div class="year-pubs">
-            {pubs.map(pub => <PublicationCard pub={pub} />)}
+  ) : (
+    <>
+      <!-- Year filter bar -->
+      <div class="filter-bar surface-light">
+        <div class="section-inner filter-inner">
+          <span class="filter-label">Filter by year</span>
+          <div class="year-pills" id="year-pills">
+            <button class="year-pill active" data-year="all">All</button>
+            {years.map(y => (
+              <button class="year-pill" data-year={String(y)}>{y}</button>
+            ))}
           </div>
         </div>
-      ))}
-    </div>
-  </div>
+      </div>
+
+      <div class="content surface-light">
+        <div class="section-inner">
+          {byYear.map(({ year, pubs }) => (
+            <div class="year-block" data-year-block={String(year)}>
+              <div class="year-marker">
+                <span class="year-num">{year}</span>
+              </div>
+              <div class="year-pubs">
+                {pubs.map(pub => <PublicationCard pub={pub} />)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  )}
 
 </Layout>
 
