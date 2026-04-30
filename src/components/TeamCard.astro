@@ -9,16 +9,16 @@ interface Props {
 
 const { member, size = 'default' } = Astro.props;
 const {
-  name, role, bio, degree,
+  name, bio,
   projectTitle,
   startDate, endDate,
   website, googleScholar, github, linkedin,
-  photo, alumni, currentStatus,
+  photo, alumni,
 } = member.data;
 
 const initials = name.split(' ').map((n: string) => n[0]).join('');
 
-const tenureStart = startDate ?? member.data.startYear?.toString();
+const tenureStart = startDate ?? (member.data as any).startYear?.toString();
 const tenureEnd   = endDate ?? (alumni ? undefined : 'Present');
 const tenure = tenureStart
   ? tenureEnd ? `${tenureStart} – ${tenureEnd}` : tenureStart
@@ -31,9 +31,7 @@ const links = [
   linkedin      && { href: linkedin,       icon: 'simple-icons:linkedin',      label: 'LinkedIn' },
 ].filter(Boolean) as { href: string; icon: string; label: string }[];
 
-const previewText = bio ?? null;
-
-const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
+const profileSlug = member.id.replace(/\/index$/, '');
 ---
 
 <article class:list={['team-card', `team-card--${size}`]}>
@@ -48,14 +46,9 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
     <h3 class="name">{name}</h3>
     {tenure       && <p class="tenure">{tenure}</p>}
     {projectTitle && <p class="project-label"><span class="project-prefix">Project:</span> {projectTitle}</p>}
-    {previewText  && <p class="bio-preview">{previewText}</p>}
+    {bio          && <p class="bio-preview">{bio}</p>}
 
-    <button
-      class="read-more-btn"
-      data-dialog={dialogId}
-      aria-haspopup="dialog"
-      type="button"
-    >Read more</button>
+    <a class="read-more-link" href={`/team/${profileSlug}`}>Read more</a>
 
     {links.length > 0 && (
       <div class="links" aria-label="Profile links">
@@ -76,99 +69,14 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
   </div>
 </article>
 
-<dialog id={dialogId} class="member-dialog">
-  <div class="dialog-card">
-    <button class="dialog-close" aria-label="Close" data-close={dialogId}>
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-        <path d="M1 1l16 16M17 1L1 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-    </button>
-
-    <div class="dialog-header">
-      <div class="dialog-photo-wrap">
-        {photo
-          ? <img src={photo.src} alt={name} />
-          : <span class="initials" aria-hidden="true">{initials}</span>
-        }
-      </div>
-      <div class="dialog-title">
-        <h2 class="dialog-name">{name}</h2>
-        {degree  && <p class="dialog-degree">{degree}</p>}
-        {tenure  && <p class="dialog-tenure">{tenure}</p>}
-        {links.length > 0 && (
-          <div class="links dialog-links">
-            {links.map(link => (
-              <a
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="link-icon"
-                aria-label={link.label}
-                title={link.label}
-              >
-                <Icon name={link.icon} />
-              </a>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-
-    {projectTitle && <p class="dialog-project-title">{projectTitle}</p>}
-    {bio          && <p class="dialog-bio">{bio}</p>}
-    {alumni && currentStatus && (
-      <div class="dialog-status">
-        <span class="status-label">Currently</span>
-        <p>{currentStatus}</p>
-      </div>
-    )}
-  </div>
-</dialog>
-
-<script>
-  function initTeamDialogs() {
-    document.querySelectorAll<HTMLButtonElement>('button[data-dialog]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const id = btn.dataset.dialog!;
-        const dialog = document.getElementById(id) as HTMLDialogElement | null;
-        dialog?.showModal();
-      });
-    });
-
-    document.querySelectorAll<HTMLButtonElement>('button[data-close]').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        const id = btn.dataset.close!;
-        const dialog = document.getElementById(id) as HTMLDialogElement | null;
-        dialog?.close();
-      });
-    });
-
-    document.querySelectorAll<HTMLDialogElement>('.member-dialog').forEach(dialog => {
-      dialog.addEventListener('click', e => {
-        const rect = (dialog.firstElementChild as HTMLElement)?.getBoundingClientRect();
-        if (!rect) return;
-        const { clientX: x, clientY: y } = e;
-        if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) {
-          dialog.close();
-        }
-      });
-    });
-  }
-
-  initTeamDialogs();
-  document.addEventListener('astro:after-swap', initTeamDialogs);
-</script>
 
 <style>
-  /* card */
   .team-card {
     display: grid;
     grid-template-columns: 80px 1fr;
-    gap: var(--space-4);
+    gap: var(--space-8);
     align-items: flex-start;
-    padding: var(--space-4) 0;
+    padding: var(--space-6) 0;
   }
 
   .team-card--large { grid-template-columns: 120px 1fr; }
@@ -187,8 +95,8 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
     color: var(--color-accent);
   }
 
-  .team-card--default .photo-wrap { width: 72px;  height: 72px;  font-size: 1.2rem; flex-shrink: 0; }
-  .team-card--large   .photo-wrap { width: 108px; height: 108px; font-size: 1.7rem; flex-shrink: 0; }
+  .team-card--default .photo-wrap { width: 72px;  height: 72px;  font-size: 1.2rem; }
+  .team-card--large   .photo-wrap { width: 108px; height: 108px; font-size: 1.7rem; }
 
   .photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
@@ -233,20 +141,14 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
     overflow: hidden;
   }
 
-  /* read more */
-  .read-more-btn {
-    all: unset;
-    box-sizing: border-box;
-    display: inline-block;
+  .read-more-link {
     font-size: 0.82rem;
     font-weight: 600;
     color: var(--color-link);
     text-decoration: underline;
     text-underline-offset: 2px;
-    cursor: pointer;
-    margin-bottom: var(--space-2);
   }
-  .read-more-btn:hover { opacity: 0.7; }
+  .read-more-link:hover { opacity: 0.7; }
 
   /* link icons */
   .links { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-top: var(--space-2); }
@@ -270,141 +172,4 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
   }
 
   .link-icon svg { width: 14px; height: 14px; }
-
-  /* dialog */
-  .member-dialog {
-    border: none;
-    padding: 0;
-    background: transparent;
-    max-width: 100vw;
-    max-height: 100vh;
-    overflow: visible;
-  }
-
-  .member-dialog::backdrop {
-    background: rgba(4, 23, 38, 0.55);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-  }
-
-  .dialog-card {
-    position: relative;
-    background: #ffffff;
-    border-radius: var(--radius-card);
-    padding: var(--space-8);
-    width: min(560px, 90vw);
-    max-height: 85vh;
-    overflow-y: auto;
-    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.25);
-    color: #0f172a;
-  }
-
-  .dialog-close {
-    all: unset;
-    box-sizing: border-box;
-    position: absolute;
-    top: var(--space-4);
-    right: var(--space-4);
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(15, 23, 42, 0.06);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: rgba(15, 23, 42, 0.5);
-    transition: background 0.15s, color 0.15s;
-  }
-  .dialog-close:hover { background: rgba(15, 23, 42, 0.12); color: #0f172a; }
-
-  .dialog-header {
-    display: flex;
-    gap: var(--space-8);
-    align-items: flex-start;
-    margin-bottom: var(--space-6);
-  }
-
-  .dialog-photo-wrap {
-    flex-shrink: 0;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 3px solid var(--color-accent);
-    background: var(--color-bg-dark);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--color-accent);
-  }
-  .dialog-photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-  .dialog-title { flex: 1; min-width: 0; padding-top: var(--space-1); }
-
-  .dialog-name {
-    margin: 0 0 0.25rem;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #0f172a;
-    padding-right: var(--space-8); /* clear the close button */
-  }
-
-  .dialog-degree {
-    margin: 0 0 0.2rem;
-    font-size: 0.82rem;
-    color: rgba(15, 23, 42, 0.55);
-  }
-
-  .dialog-tenure {
-    margin: 0 0 var(--space-3);
-    font-size: 0.82rem;
-    font-style: italic;
-    color: rgba(15, 23, 42, 0.45);
-  }
-
-  .dialog-links .link-icon { pointer-events: auto; }
-  .dialog-links .link-icon:hover {
-    background: var(--color-accent);
-    color: #0f172a;
-  }
-
-  .dialog-project-title {
-    margin: 0 0 var(--space-2);
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--color-link);
-  }
-
-  .dialog-bio {
-    margin: 0 0 var(--space-4);
-    font-size: 0.9rem;
-    line-height: 1.7;
-    color: rgba(15, 23, 42, 0.75);
-  }
-
-  .dialog-status {
-    margin-top: var(--space-4);
-    padding: var(--space-3) var(--space-4);
-    background: rgba(18, 63, 84, 0.06);
-    border-left: 3px solid var(--color-link);
-    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  }
-
-  .status-label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--color-link);
-  }
-
-  .dialog-status p {
-    margin: 0.25rem 0 0;
-    font-size: 0.88rem;
-    line-height: 1.6;
-    color: rgba(15, 23, 42, 0.75);
-  }
 </style>

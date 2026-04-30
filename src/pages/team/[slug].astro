@@ -1,0 +1,312 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PublicationCard from '../../components/PublicationCard.astro';
+import { getCollection } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+
+export async function getStaticPaths() {
+  const members = await getCollection('team', m => !m.data.draft);
+  return members.map(member => ({
+    params: { slug: member.id.replace(/\/index$/, '') },
+    props: { member },
+  }));
+}
+
+const { member } = Astro.props;
+const {
+  name, role, bio, degree,
+  projectTitle, projectDescription,
+  startDate, endDate,
+  website, googleScholar, github, linkedin,
+  photo, alumni, currentStatus,
+} = member.data;
+
+const roleLabel: Record<string, string> = {
+  'Faculty':                'Principal Investigator',
+  'Postdoctoral Researcher':'Postdoctoral Researcher',
+  'PhD Student':            'PhD Student',
+  "Master's Student":       "Master's Student",
+  'Undergraduate Student':  'Undergraduate Student',
+  'Research Assistant':     'Research Assistant',
+  'Visiting Researcher':    'Visiting Researcher',
+};
+const displayRole = (alumni ? 'Alumni — ' : '') + (roleLabel[role] ?? role);
+
+const tenureStart = startDate ?? (member.data as any).startYear?.toString();
+const tenureEnd   = endDate ?? (alumni ? undefined : 'Present');
+const tenure = tenureStart
+  ? tenureEnd ? `${tenureStart} – ${tenureEnd}` : tenureStart
+  : null;
+
+const links = [
+  website       && { href: website,       icon: 'lucide:globe',               label: 'Website' },
+  googleScholar && { href: googleScholar,  icon: 'simple-icons:googlescholar', label: 'Google Scholar' },
+  github        && { href: github,         icon: 'simple-icons:github',        label: 'GitHub' },
+  linkedin      && { href: linkedin,       icon: 'simple-icons:linkedin',      label: 'LinkedIn' },
+].filter(Boolean) as { href: string; icon: string; label: string }[];
+
+const initials = name.split(' ').map((n: string) => n[0]).join('');
+
+// OG image: use the member's photo if available, else fall back to lab logo
+const ogImage = photo
+  ? new URL(photo.src, Astro.site).href
+  : undefined;
+
+const bioSnippet = bio ? bio.slice(0, 160) + (bio.length > 160 ? '…' : '') : undefined;
+const slug = member.id.replace(/\/index$/, '');
+
+const allPubs = await getCollection('publications', p => !p.data.draft);
+const memberPubs = allPubs
+  .filter(p => p.data.authors.some(a => a.toLowerCase() === name.toLowerCase()))
+  .sort((a, b) => b.data.year - a.data.year);
+---
+
+<Layout
+  title={name}
+  description={bioSnippet ?? `${name} — ${role} at the FORT Lab.`}
+  ogImage={ogImage}
+>
+  <div class="page">
+    <div class="card">
+
+      <a href="/team" class="back-link">← Back to Team</a>
+
+      <div class="profile">
+        <div class="photo-wrap">
+          {photo
+            ? <img src={photo.src} alt={name} />
+            : <span class="initials">{initials}</span>
+          }
+        </div>
+
+        <div class="info">
+          <h1 class="name">{name}</h1>
+          <p class="role-badge" class:list={{ alumni }}>{displayRole}</p>
+          {degree  && <p class="degree">{degree}</p>}
+          {tenure  && <p class="tenure">{tenure}</p>}
+
+          {links.length > 0 && (
+            <div class="links">
+              {links.map(link => (
+                <a href={link.href} target="_blank" rel="noopener noreferrer" class="link-icon" aria-label={link.label} title={link.label}>
+                  <Icon name={link.icon} />
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {projectTitle && (
+        <div class="section">
+          <p class="section-label">Project</p>
+          <p class="project-title">{projectTitle}</p>
+          {projectDescription && <p class="project-desc">{projectDescription}</p>}
+        </div>
+      )}
+
+      {bio && (
+        <div class="section">
+          <p class="section-label">About</p>
+          <p class="bio">{bio}</p>
+        </div>
+      )}
+
+      {alumni && currentStatus && (
+        <div class="status-box">
+          <span class="status-label">Currently</span>
+          <p>{currentStatus}</p>
+        </div>
+      )}
+
+      {memberPubs.length > 0 && (
+        <div class="section">
+          <p class="section-label">Publications from the FORT Lab</p>
+          <div class="pub-list">
+            {memberPubs.map(pub => <PublicationCard pub={pub} />)}
+          </div>
+        </div>
+      )}
+
+
+    </div>
+  </div>
+</Layout>
+
+
+<style>
+  .page {
+    background: var(--color-bg-dark);
+    min-height: 100vh;
+    padding: calc(var(--nav-height) + var(--space-12)) var(--content-pad-x) var(--space-16);
+    display: flex;
+    justify-content: center;
+  }
+
+  .card {
+    background: #ffffff;
+    border-radius: var(--radius-card);
+    padding: var(--space-10) var(--space-10);
+    width: 100%;
+    max-width: 640px;
+    align-self: flex-start;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--color-link);
+    text-decoration: none;
+    margin-bottom: var(--space-8);
+  }
+  .back-link:hover { text-decoration: underline; }
+
+  /* ── Profile header ─────────────────────────────────────── */
+  .profile {
+    display: flex;
+    gap: var(--space-8);
+    align-items: flex-start;
+    margin-bottom: var(--space-8);
+  }
+
+  .photo-wrap {
+    flex-shrink: 0;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--color-accent);
+    background: var(--color-bg-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-accent);
+  }
+
+  .photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .info { flex: 1; min-width: 0; padding-top: var(--space-1); }
+
+  .role-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-link);
+    background: rgba(18, 63, 84, 0.08);
+    padding: 0.2rem 0.65rem;
+    border-radius: var(--radius-full);
+    margin: 0 0 var(--space-2);
+  }
+
+  .role-badge.alumni {
+    color: rgba(15, 23, 42, 0.5);
+    background: rgba(15, 23, 42, 0.06);
+  }
+
+  .name {
+    margin: 0 0 0.2rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.2;
+  }
+
+  .degree {
+    margin: 0 0 0.15rem;
+    font-size: 0.85rem;
+    color: rgba(15, 23, 42, 0.55);
+  }
+
+  .tenure {
+    margin: 0 0 var(--space-3);
+    font-size: 0.82rem;
+    font-style: italic;
+    color: rgba(15, 23, 42, 0.4);
+  }
+
+  .links { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+
+  .link-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-sm);
+    background: rgba(15, 23, 42, 0.05);
+    color: rgba(15, 23, 42, 0.45);
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  .link-icon:hover { background: var(--color-accent); color: #0f172a; }
+  .link-icon svg { width: 14px; height: 14px; }
+
+  /* ── Sections ────────────────────────────────────────────── */
+  .section { margin-bottom: var(--space-6); }
+
+  .section-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(15, 23, 42, 0.4);
+    margin: 0 0 var(--space-2);
+  }
+
+  .pub-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .project-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-link);
+    margin: 0 0 var(--space-1);
+  }
+
+  .project-desc, .bio {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: rgba(15, 23, 42, 0.75);
+    margin: 0;
+  }
+
+  /* ── Alumni status ───────────────────────────────────────── */
+  .status-box {
+    margin-bottom: var(--space-6);
+    padding: var(--space-3) var(--space-4);
+    background: rgba(18, 63, 84, 0.06);
+    border-left: 3px solid var(--color-link);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+
+  .status-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-link);
+  }
+
+  .status-box p {
+    margin: 0.25rem 0 0;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: rgba(15, 23, 42, 0.75);
+  }
+
+
+  @media (max-width: 640px) {
+    .page { padding-top: calc(var(--nav-height) + var(--space-6)); }
+    .card { padding: var(--space-8) var(--space-6); }
+    .profile { flex-direction: column; align-items: center; text-align: center; }
+    .links { justify-content: center; }
+  }
+</style>
