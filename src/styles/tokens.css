@@ -14,7 +14,7 @@
   --color-accent-hover: #E0B93A;   /* slightly deeper for hover states */
 
   /* ── Backgrounds ──────────────────────────────────────────── */
-  --color-bg-dark:    #0B0F1E;              /* site base — entire background */
+  --color-bg-dark:    #153ed1;              /* site base — entire background */
   --color-bg-surface: #141928;              /* cards, panels — slightly lighter than base */
   --color-bg-light:   #FFFFFF;             /* reserved for any light-on-dark insets */
   --color-bg-subtle:  rgba(255,255,255,0.04); /* very subtle surface tint */

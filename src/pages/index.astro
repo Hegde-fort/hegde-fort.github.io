@@ -69,11 +69,9 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
 
 <style>
   .hero {
-    /* pull hero up so it starts at the very top, behind the fixed nav */
-    margin-top: calc(-1 * var(--nav-height));
-    padding-top: calc(var(--nav-height) + 4rem);
+    padding-top: 4rem;
     padding-bottom: 4rem;
-    background: red;
+    background: url('/images/HeroBackground.png') center center / cover no-repeat;
   }
 
   .hero-inner {
