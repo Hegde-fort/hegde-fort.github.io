@@ -30,8 +30,15 @@ const site = defineCollection({
       blurb: z.string().optional(),
     }),
     contact: z.object({
+      email: z.string().optional(),
       address: z.string().optional(),
       officeHours: z.string().optional(),
+    }).optional(),
+    social: z.object({
+      twitter: z.string().url().optional(),
+      linkedin: z.string().url().optional(),
+      googleScholar: z.string().url().optional(),
+      github: z.string().url().optional(),
     }).optional(),
   }),
 });
