@@ -1,4 +1,7 @@
 ---
+// astro-icon import kept here — Icon is used on the team page
+// import { Icon } from 'astro-icon/components';
+
 interface Props {
   labName: string;
   affiliations: string[];
@@ -6,15 +9,45 @@ interface Props {
 
 const { labName, affiliations } = Astro.props;
 const currentYear = new Date().getFullYear();
+
+const navLinks = [
+  { label: 'Home',         href: '/' },
+  { label: 'Research',     href: '/research/' },
+  { label: 'Publications', href: '/publications/' },
+  { label: 'Team',         href: '/team/' },
+  { label: 'News',         href: '/news/' },
+  { label: 'Contact',      href: '/contact/' },
+];
 ---
 
-<footer>
-  <div class="footer-inner">
-    <p class="lab-name">{labName}</p>
+<footer class="surface-light">
+  <!-- Stamp icon straddling the dark section above and white footer -->
+  <div class="stamp-wrap">
+    <div class="stamp">
+      <img src="/FORTLogo.png" alt={labName + ' logo'} />
+    </div>
+  </div>
 
-    {affiliations.map(a => (
-      <p class="affiliation">{a}</p>
-    ))}
+  <div class="footer-inner">
+    <div class="footer-cols">
+      <!-- Left: Quick navigation -->
+      <div class="footer-col">
+        <h3 class="col-heading">Explore</h3>
+        <ul class="nav-list">
+          {navLinks.map(link => (
+            <li><a href={link.href}>{link.label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Right: Affiliations -->
+      <div class="footer-col">
+        <h3 class="col-heading">Affiliations</h3>
+        <ul class="affiliation-list">
+          {affiliations.map(a => <li>{a}</li>)}
+        </ul>
+      </div>
+    </div>
 
     <p class="copyright">&copy; {currentYear} {labName}. All rights reserved.</p>
   </div>
@@ -22,37 +55,108 @@ const currentYear = new Date().getFullYear();
 
 <style>
   footer {
-    padding: var(--space-12) var(--content-pad-x);
-    margin-top: auto;
-    text-align: center;
-    border-top: 1px solid var(--color-border);
-    background: var(--color-bg-surface);
+    background: #ffffff;
+    padding-top: 0;
   }
 
+  /* ── Stamp ─────────────────────────────────────────────────── */
+  .stamp-wrap {
+    display: flex;
+    justify-content: center;
+    transform: translateY(-50%);
+    margin-bottom: calc(-1 * var(--space-6));
+  }
+
+  .stamp {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--color-bg-dark);
+    border: 4px solid #ffffff;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .stamp img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── Inner layout ─────────────────────────────────────────── */
   .footer-inner {
     max-width: var(--max-width);
     margin: 0 auto;
+    padding: var(--space-8) var(--content-pad-x) var(--space-10);
+  }
+
+  .footer-cols {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--space-10);
+    padding-bottom: var(--space-8);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  @media (max-width: 600px) {
+    .footer-cols { grid-template-columns: 1fr; }
+  }
+
+  /* ── Column headings ──────────────────────────────────────── */
+  .col-heading {
+    margin: 0 0 var(--space-3);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+  }
+
+  /* ── Quick nav list ───────────────────────────────────────── */
+  .nav-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
-    align-items: center;
   }
 
-  .lab-name {
-    font-weight: 700;
-    font-size: 1.1rem;
-    margin: 0;
+  .nav-list a {
+    font-size: 0.9rem;
+    color: var(--color-text-muted) !important;
+    text-decoration: none !important;
+    transition: color 0.15s ease;
   }
 
-  .affiliation {
+  .nav-list a:hover {
+    color: var(--color-text-primary) !important;
+  }
+
+  /* ── Affiliations list ────────────────────────────────────── */
+  .affiliation-list {
     margin: 0;
+    padding: 0 0 0 var(--space-4);
+    list-style: disc;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .affiliation-list li {
     font-size: 0.9rem;
     color: var(--color-text-muted);
+    line-height: 1.5;
   }
 
+  /* ── Copyright ────────────────────────────────────────────── */
   .copyright {
-    margin: var(--space-3) 0 0;
+    margin: var(--space-6) 0 0;
     font-size: 0.8rem;
     color: var(--color-text-muted);
+    text-align: center;
   }
 </style>
