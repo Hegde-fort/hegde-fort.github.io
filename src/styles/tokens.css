@@ -12,15 +12,18 @@
   /* ── Brand colors ─────────────────────────────────────────── */
   --color-accent:       #F2C94C;   /* golden yellow — buttons, highlights */
   --color-accent-hover: #E0B93A;   /* slightly deeper for hover states */
+  --color-link:         #123F54;   /* blue — inline text links on light backgrounds */
 
   /* ── Backgrounds ──────────────────────────────────────────── */
   --color-bg-dark:    #041726;              /* site base — entire background */
-  --color-bg-surface: #141928;              /* cards, panels — slightly lighter than base */
-  --color-bg-light:   #FFFFFF;             /* reserved for any light-on-dark insets */
+  --color-bg-surface: #141928;             /* cards, panels — slightly lighter than base */
+  --color-bg-light:   #FFFFFF;             /* pure white insets */
+  --color-bg-panel:   #D3E5E9;             /* light blue-gray panel (hero news aside, etc.) */
   --color-bg-subtle:  rgba(255,255,255,0.04); /* very subtle surface tint */
 
   /* ── Text ─────────────────────────────────────────────────── */
   --color-text-on-dark:  #FFFFFF;           /* primary text on dark bg */
+  --color-text-on-white:  #041726;           /* primary text on dark bg */
   --color-text-primary:  #FFFFFF;           /* alias used by components */
   --color-text-muted:    rgba(255,255,255,0.5); /* captions, metadata */
 
@@ -43,6 +46,8 @@
   --radius-sm:   4px;
   --radius-md:   8px;
   --radius-lg:   12px;
+  --radius-btn:  14px;   /* buttons — change here to restyle all buttons */
+  --radius-card: 20px;   /* panels, cards, modals — change here to restyle all cards */
   --radius-full: 9999px;
 
   /* ── Shadows ──────────────────────────────────────────────── */

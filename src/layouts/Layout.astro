@@ -24,7 +24,7 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/FORTLogo.png" />
     <meta name="generator" content={Astro.generator} />
     <title>{title} | {lab.name}</title>
   </head>
@@ -80,7 +80,42 @@ const {
     color: inherit;
   }
 
-  /* Utility classes available globally */
+  /* ── Layout utility ───────────────────────────────────────── */
+  .section-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--space-16) var(--content-pad-x);
+  }
+
+  /* ── Light surface context ─────────────────────────────────── */
+  /* Apply .surface-light to any wrapper on a white/light bg.
+     All CSS var tokens and link styles cascade to children. */
+  .surface-light {
+    color: #0f172a;
+    --color-text-primary: #0f172a;
+    --color-text-muted:   rgba(15, 23, 42, 0.55);
+    --color-border:       rgba(15, 23, 42, 0.12);
+    --color-bg-subtle:    rgba(15, 23, 42, 0.05);
+  }
+
+  /* All hyperlinks inside a light surface get underline + brand link color */
+  .surface-light a:not(.btn):not(.btn-outline):not(.read-link) {
+    color: var(--color-link);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  /* ── Shared read-link (used in PublicationCard & NewsCard) ─── */
+  .read-link {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-link);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .read-link:hover { opacity: 0.8; }
+
+  /* ── Utility classes available globally ───────────────────── */
   .btn {
     display: inline-block;
     padding: 0.65rem 1.5rem;
