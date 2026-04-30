@@ -19,7 +19,7 @@ const currentPath = Astro.url.pathname;
 <div class="nav-wrapper">
   <nav>
     <a class="nav-logo" href="/">
-      <!-- TODO: replace with lab logo/wordmark image -->
+      <img src="/FORTLogo.png" alt={labName} class="nav-logo-img" />
       <span>{labName}</span>
     </a>
 
@@ -47,6 +47,13 @@ const currentPath = Astro.url.pathname;
     z-index: 100;
     height: var(--nav-height);
     background: transparent;
+    transition: background 0.25s ease, backdrop-filter 0.25s ease;
+  }
+
+  .nav-wrapper.scrolled {
+    background: rgba(4, 23, 38, 0.75);  /* --color-bg-dark at 75% opacity */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
 
   nav {
@@ -61,10 +68,19 @@ const currentPath = Astro.url.pathname;
   }
 
   .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
     font-weight: 700;
     font-size: 1.25rem;
     text-decoration: none;
-    color: inherit;
+    color: var(--color-accent);
+  }
+
+  .nav-logo-img {
+    height: 2.2rem;
+    width: auto;
+    display: block;
   }
 
   .nav-links {
@@ -86,3 +102,14 @@ const currentPath = Astro.url.pathname;
     color: var(--color-accent);
   }
 </style>
+
+<script>
+  const nav = document.querySelector('.nav-wrapper') as HTMLElement;
+
+  function update() {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }
+
+  update();
+  window.addEventListener('scroll', update, { passive: true });
+</script>

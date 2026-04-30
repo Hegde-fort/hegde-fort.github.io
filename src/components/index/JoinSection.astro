@@ -1,0 +1,86 @@
+---
+import Button from '../Button.astro';
+import { getEntry } from 'astro:content';
+
+const lab = (await getEntry('site', 'lab'))!.data;
+---
+
+<section class="join-section">
+  <div class="section-inner join-inner">
+    <div class="join-text">
+      <p class="join-label">Joining</p>
+      <h2>{lab.joining.headline}</h2>
+      <p class="join-desc">{lab.description}</p>
+      <div class="join-buttons">
+        <Button href="/about">Contact Us</Button>
+        <Button href="/team">Meet Our Team</Button>
+      </div>
+    </div>
+
+    <!-- TODO: swap .photo-placeholder for <img src="/images/lab-group.jpg" alt="Lab group photo"> -->
+    <div class="photo-frame">
+      <div class="photo-placeholder">Lab photo coming soon</div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .join-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 0.5rem;
+    color: var(--color-accent);
+  }
+
+  .join-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .join-text h2 {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 0 0 1rem;
+  }
+
+  .join-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .join-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1.75rem;
+  }
+
+  .photo-frame {
+    border-radius: var(--radius-card);
+    border: 4px solid var(--color-bg-light);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+  }
+
+  .photo-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--color-bg-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 700px) {
+    .join-inner { grid-template-columns: 1fr; }
+  }
+</style>

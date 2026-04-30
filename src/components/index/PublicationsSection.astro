@@ -1,0 +1,68 @@
+---
+import PublicationCard from '../PublicationCard.astro';
+import Button from '../Button.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+const lab = (await getEntry('site', 'lab'))!.data;
+
+const featuredPubs = (await getCollection('publications', p => !p.data.draft && p.data.featured))
+  .sort((a, b) => b.data.year - a.data.year)
+  .slice(0, 3);
+---
+
+<section class="pub-section surface-light">
+  <div class="section-inner pub-inner">
+    <h2 class="pub-title">Publications</h2>
+    <p class="pub-sub">{lab.description}</p>
+    <div class="pub-btn-wrap">
+      <Button href="/publications">Browse All</Button>
+    </div>
+    <div class="pub-grid">
+      {featuredPubs.map(pub => <PublicationCard pub={pub} compact={true} />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .pub-section {
+    background: var(--color-bg-light);
+  }
+
+  .pub-inner { text-align: center; }
+
+  .pub-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    margin: 0 0 1rem;
+  }
+
+  .pub-sub {
+    max-width: 680px;
+    margin: 0 auto 1.75rem;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--color-text-muted);
+    text-align: left;
+  }
+
+  .pub-btn-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: var(--space-12);
+  }
+
+  .pub-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-8);
+    text-align: left;
+  }
+
+  @media (max-width: 900px) {
+    .pub-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .pub-grid { grid-template-columns: 1fr; }
+  }
+</style>

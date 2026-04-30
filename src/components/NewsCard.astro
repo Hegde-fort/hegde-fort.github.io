@@ -32,13 +32,10 @@ const formattedDate = date.toLocaleDateString('en-CA', {
     )}
 
     <h3 class="title">
-      <a
-        href={href}
-        target={isExternal ? '_blank' : undefined}
-        rel={isExternal ? 'noopener' : undefined}
-      >
-        {title}
-      </a>
+      {compact
+        ? title  /* plain text — "Read Article" below is the CTA */
+        : <a href={href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener' : undefined}>{title}</a>
+      }
     </h3>
 
     <p class="summary">{summary}</p>
@@ -139,14 +136,7 @@ const formattedDate = date.toLocaleDateString('en-CA', {
     color: var(--color-text-muted);
   }
 
-  .read-link {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--color-link);   /* always uses the blue link token, never --color-accent */
-    text-decoration: underline;
-    text-underline-offset: 2px;
-  }
-  .read-link:hover { opacity: 0.8; }
+  /* .read-link styles live in Layout.astro (global) */
 
   .tags {
     display: flex;

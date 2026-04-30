@@ -1,0 +1,98 @@
+---
+import NewsCard from '../NewsCard.astro';
+import Button from '../Button.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+const lab = (await getEntry('site', 'lab'))!.data;
+
+const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.featured))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+---
+
+<section class="hero">
+  <div class="hero-inner section-inner">
+    <div class="hero-text">
+      <p class="lab-label">{lab.name}</p>
+      <h1>{lab.hero.headline}</h1>
+      <p class="hero-sub">{lab.hero.description}</p>
+      <Button href="/about">Learn More</Button>
+    </div>
+
+    <div class="hero-aside">
+      <div class="news-preview surface-light">
+        <h2>News</h2>
+        {featuredNews.map(item => <NewsCard item={item} compact={true} />)}
+        <Button href="/news" fullWidth={true}>Browse All News</Button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    margin-top: calc(-1 * var(--nav-height));
+    padding-top: var(--nav-height);
+    background: url('/images/HeroBackground.png') center/cover no-repeat;
+  }
+
+  .hero-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .lab-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 0.75rem;
+    color: var(--color-accent);
+  }
+
+  .hero-text h1 {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin: 0 0 1rem;
+  }
+
+  .hero-sub {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin: 0 0 1.75rem;
+    color: var(--color-text-muted);
+  }
+
+  /* ── News preview panel ──────────────────────────────────── */
+  .news-preview {
+    background: var(--color-bg-panel);
+    border-radius: var(--radius-card);
+    padding: var(--space-6);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
+  }
+
+  .news-preview :global(.news-card + .news-card) {
+    margin-top: var(--space-3);
+  }
+
+  .news-preview h2 {
+    margin: 0 0 var(--space-4);
+    font-size: 1.4rem;
+    font-weight: 800;
+    text-align: center;
+    letter-spacing: 0.04em;
+  }
+
+  .news-preview :global(.btn--full) {
+    margin-top: var(--space-4);
+  }
+
+  @media (max-width: 700px) {
+    .hero-inner { grid-template-columns: 1fr; }
+  }
+</style>

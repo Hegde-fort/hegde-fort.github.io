@@ -3,42 +3,53 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   pub: CollectionEntry<'publications'>;
+  /** Compact grid card used on the home page */
+  compact?: boolean;
 }
 
-const { pub } = Astro.props;
+const { pub, compact = false } = Astro.props;
 const { title, authors, venue, year, url, pdf, code, tags } = pub.data;
 ---
 
-<article class="pub-card">
-  <h3 class="title">
-    {url
-      ? <a href={url} target="_blank" rel="noopener">{title}</a>
-      : title
-    }
-  </h3>
+<article class:list={['pub-card', { 'pub-card--compact': compact }]}>
+  <!-- Title is plain text — "Read paper" below is the CTA -->
+  <h3 class="title">{title}</h3>
 
   <p class="authors">{authors.join(', ')}</p>
   <p class="venue">{venue} · {year}</p>
 
-  {tags.length > 0 && (
+  {!compact && tags.length > 0 && (
     <div class="tags">
       {tags.map(tag => <span class="tag">{tag}</span>)}
     </div>
   )}
 
   <div class="links">
-    {url  && <a href={url}  target="_blank" rel="noopener">Paper</a>}
-    {pdf  && <a href={pdf}  target="_blank" rel="noopener">PDF</a>}
-    {code && <a href={code} target="_blank" rel="noopener">Code</a>}
+    {url  && <a class="read-link" href={url}  target="_blank" rel="noopener">Read paper</a>}
+    {!compact && pdf  && <a href={pdf}  target="_blank" rel="noopener">PDF</a>}
+    {!compact && code && <a href={code} target="_blank" rel="noopener">Code</a>}
   </div>
 </article>
 
 <style>
+  /* ── Base ──────────────────────────────────────────────────── */
   .pub-card {
     padding: var(--space-6) 0;
     border-bottom: 1px solid var(--color-border);
   }
 
+  /* ── Compact (home page grid) ──────────────────────────────── */
+  .pub-card--compact {
+    border-bottom: none;
+    padding: 0;
+  }
+
+  .pub-card--compact .title {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  /* ── Shared ────────────────────────────────────────────────── */
   .title {
     margin: 0 0 0.4rem;
     font-size: 1rem;
@@ -75,9 +86,12 @@ const { title, authors, venue, year, url, pdf, code, tags } = pub.data;
     margin-top: 0.5rem;
   }
 
-  .links a {
+  /* .read-link styles live in Layout.astro (global) */
+
+  .links a:not(.read-link) {
     font-size: 0.82rem;
     font-weight: 600;
     text-decoration: none;
+    color: var(--color-text-muted);
   }
 </style>
