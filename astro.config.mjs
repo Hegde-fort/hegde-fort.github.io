@@ -13,6 +13,7 @@ export default defineConfig({
     icon({
       include: {
         'simple-icons': ['x', 'linkedin', 'googlescholar', 'github'],
+        'lucide': ['globe', 'external-link'],
       },
     }),
   ],

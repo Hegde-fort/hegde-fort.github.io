@@ -31,17 +31,11 @@ const links = [
   linkedin      && { href: linkedin,       icon: 'simple-icons:linkedin',      label: 'LinkedIn' },
 ].filter(Boolean) as { href: string; icon: string; label: string }[];
 
-// Compact preview text: project title or truncated bio
-const PREVIEW_LIMIT = 110;
-const previewText = bio && bio.length > PREVIEW_LIMIT
-  ? bio.slice(0, PREVIEW_LIMIT).trimEnd() + '…'
-  : bio ?? null;
+const previewText = bio ?? null;
 
-// Unique id for the dialog
 const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
 ---
 
-<!-- Compact card — plain div, no click-to-open -->
 <article class:list={['team-card', `team-card--${size}`]}>
   <div class="photo-wrap">
     {photo
@@ -56,7 +50,6 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
     {projectTitle && <p class="project-label"><span class="project-prefix">Project:</span> {projectTitle}</p>}
     {previewText  && <p class="bio-preview">{previewText}</p>}
 
-    <!-- "Read more" link sits above the social icons -->
     <button
       class="read-more-btn"
       data-dialog={dialogId}
@@ -83,7 +76,6 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
   </div>
 </article>
 
-<!-- Full-detail dialog -->
 <dialog id={dialogId} class="member-dialog">
   <div class="dialog-card">
     <button class="dialog-close" aria-label="Close" data-close={dialogId}>
@@ -134,9 +126,7 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
 </dialog>
 
 <script>
-  // One shared script handles all team card dialogs on the page
   function initTeamDialogs() {
-    // Open — only the "Read more" buttons (button[data-dialog])
     document.querySelectorAll<HTMLButtonElement>('button[data-dialog]').forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -146,7 +136,6 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
       });
     });
 
-    // Close via X button
     document.querySelectorAll<HTMLButtonElement>('button[data-close]').forEach(btn => {
       btn.addEventListener('click', e => {
         e.stopPropagation();
@@ -156,7 +145,6 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
       });
     });
 
-    // Close by clicking the backdrop (outside the card)
     document.querySelectorAll<HTMLDialogElement>('.member-dialog').forEach(dialog => {
       dialog.addEventListener('click', e => {
         const rect = (dialog.firstElementChild as HTMLElement)?.getBoundingClientRect();
@@ -169,13 +157,12 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
     });
   }
 
-  // Run on page load and after any Astro view transitions
   initTeamDialogs();
   document.addEventListener('astro:after-swap', initTeamDialogs);
 </script>
 
 <style>
-  /* ── Compact card ───────────────────────────────────────────── */
+  /* card */
   .team-card {
     display: grid;
     grid-template-columns: 80px 1fr;
@@ -186,7 +173,7 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
 
   .team-card--large { grid-template-columns: 120px 1fr; }
 
-  /* ── Photo ──────────────────────────────────────────────────── */
+  /* photo */
   .photo-wrap {
     flex-shrink: 0;
     border-radius: 50%;
@@ -205,7 +192,7 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
 
   .photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-  /* ── Info ───────────────────────────────────────────────────── */
+  /* info */
   .info { flex: 1; min-width: 0; }
 
   .name {
@@ -226,7 +213,7 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
 
   .project-label {
     margin: 0 0 var(--space-1);
-    font-size: 0.8rem;
+    font-size: 0.76rem;
     color: rgba(15, 23, 42, 0.7);
   }
 
@@ -237,12 +224,16 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
 
   .bio-preview {
     margin: 0 0 var(--space-2);
-    font-size: 0.82rem;
+    font-size: 0.76rem;
     line-height: 1.5;
     color: rgba(15, 23, 42, 0.65);
+    display: -webkit-box;
+    -webkit-line-clamp: 10;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
-  /* ── Read more link ─────────────────────────────────────────── */
+  /* read more */
   .read-more-btn {
     all: unset;
     box-sizing: border-box;
@@ -257,7 +248,7 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
   }
   .read-more-btn:hover { opacity: 0.7; }
 
-  /* ── Link icon row (card) ───────────────────────────────────── */
+  /* link icons */
   .links { display: flex; gap: var(--space-2); flex-wrap: wrap; margin-top: var(--space-2); }
 
   .link-icon {
@@ -280,7 +271,7 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
 
   .link-icon svg { width: 14px; height: 14px; }
 
-  /* ── Dialog backdrop ────────────────────────────────────────── */
+  /* dialog */
   .member-dialog {
     border: none;
     padding: 0;
@@ -296,7 +287,6 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
     -webkit-backdrop-filter: blur(4px);
   }
 
-  /* ── Dialog card ────────────────────────────────────────────── */
   .dialog-card {
     position: relative;
     background: #ffffff;
@@ -309,7 +299,6 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
     color: #0f172a;
   }
 
-  /* ── Close button ───────────────────────────────────────────── */
   .dialog-close {
     all: unset;
     box-sizing: border-box;
@@ -329,10 +318,9 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
   }
   .dialog-close:hover { background: rgba(15, 23, 42, 0.12); color: #0f172a; }
 
-  /* ── Dialog header ──────────────────────────────────────────── */
   .dialog-header {
     display: flex;
-    gap: var(--space-5);
+    gap: var(--space-8);
     align-items: flex-start;
     margin-bottom: var(--space-6);
   }
@@ -377,14 +365,12 @@ const dialogId = `modal-${member.id.replace(/\//g, '-')}`;
     color: rgba(15, 23, 42, 0.45);
   }
 
-  /* Link icons in modal are actual <a> tags */
   .dialog-links .link-icon { pointer-events: auto; }
   .dialog-links .link-icon:hover {
     background: var(--color-accent);
     color: #0f172a;
   }
 
-  /* ── Dialog body ────────────────────────────────────────────── */
   .dialog-project-title {
     margin: 0 0 var(--space-2);
     font-size: 0.9rem;

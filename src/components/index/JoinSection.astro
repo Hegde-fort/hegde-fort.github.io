@@ -17,9 +17,11 @@ const lab = (await getEntry('site', 'lab'))!.data;
       </div>
     </div>
 
-    <!-- TODO: swap .photo-placeholder for <img src="/images/lab-group.jpg" alt="Lab group photo"> -->
     <div class="photo-frame">
-      <div class="photo-placeholder">Lab photo coming soon</div>
+      <img
+        src="/images/teamPhotos/Summer2022_teamlunch.jpg"
+        alt="FORT Lab team lunch, Summer 2022"
+      />
     </div>
   </div>
 </section>
@@ -69,15 +71,11 @@ const lab = (await getEntry('site', 'lab'))!.data;
     aspect-ratio: 4 / 3;
   }
 
-  .photo-placeholder {
+  .photo-frame img {
     width: 100%;
     height: 100%;
-    background: var(--color-bg-surface);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-text-muted);
-    font-size: 0.9rem;
+    object-fit: cover;
+    display: block;
   }
 
   @media (max-width: 700px) {

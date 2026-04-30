@@ -77,6 +77,9 @@ const team = defineCollection({
       github: z.string().url().optional(),
       linkedin: z.string().url().optional(),
       startYear: z.number().optional(),
+      // Free-form date strings for display, e.g. "May 2023" or "Summer 2022"
+      startDate: z.string().optional(),
+      endDate: z.string().optional(),
       // Alumni fields
       alumni: z.boolean().default(false),
       // "What are you up to now?" shown on alumni cards
