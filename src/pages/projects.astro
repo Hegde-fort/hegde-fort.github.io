@@ -5,8 +5,6 @@ import { getCollection } from 'astro:content';
 
 const allProjects = await getCollection('projects', p => !p.data.draft);
 
-// Active projects: most recently started first
-// Completed/archived: most recently ended first, falling back to startDate
 const byStartDesc = (a: typeof allProjects[0], b: typeof allProjects[0]) =>
   b.data.startDate.getTime() - a.data.startDate.getTime();
 
@@ -19,70 +17,134 @@ const byEndDesc = (a: typeof allProjects[0], b: typeof allProjects[0]) => {
 const active    = allProjects.filter(p => p.data.status === 'active')   .sort(byStartDesc);
 const completed = allProjects.filter(p => p.data.status === 'completed').sort(byEndDesc);
 const archived  = allProjects.filter(p => p.data.status === 'archived') .sort(byEndDesc);
+
+type Accent = 'yellow' | 'blue' | 'gray';
+const groups = (
+  [
+    { label: 'Active Projects',    accent: 'yellow' as Accent, items: active    },
+    { label: 'Completed Projects', accent: 'blue'   as Accent, items: completed },
+    { label: 'Archived',           accent: 'gray'   as Accent, items: archived  },
+  ] as const
+).filter(g => g.items.length > 0);
 ---
 
 <Layout title="Projects" description="Research projects from the FORT Lab.">
 
-  <section class="page-header">
-    <h1>Projects</h1>
-    <p class="subtitle">
-      <!-- TODO: optional one-liner about research projects -->
-    </p>
+  <section class="hero">
+    <div class="section-inner">
+      <p class="hero-label">Research</p>
+      <h1 class="hero-heading">Projects</h1>
+      <p class="hero-meta">
+        {active.length > 0 && `${active.length} active`}
+        {active.length > 0 && completed.length > 0 && ' · '}
+        {completed.length > 0 && `${completed.length} completed`}
+      </p>
+    </div>
   </section>
 
-  {active.length > 0 && (
-    <section class="section">
-      <h2>Active Projects</h2>
-      <div class="project-grid">
-        {active.map(project => <ProjectCard project={project} />)}
-      </div>
-    </section>
-  )}
+  <div class="content surface-light">
+    <div class="section-inner">
 
-  {completed.length > 0 && (
-    <section class="section">
-      <h2>Completed Projects</h2>
-      <div class="project-grid">
-        {completed.map(project => <ProjectCard project={project} />)}
-      </div>
-    </section>
-  )}
+      {groups.length === 0 && (
+        <p class="empty">No projects to show yet — check back soon.</p>
+      )}
 
-  {archived.length > 0 && (
-    <section class="section">
-      <h2>Archived</h2>
-      <div class="project-grid">
-        {archived.map(project => <ProjectCard project={project} />)}
-      </div>
-    </section>
-  )}
+      {groups.map(group => (
+        <div class="group">
+          <div class="group-header">
+            <span class:list={['group-dot', `dot-${group.accent}`]}></span>
+            <h2 class="group-title">{group.label}</h2>
+          </div>
+          <div class="project-grid">
+            {group.items.map(project => (
+              <ProjectCard project={project} accent={group.accent} />
+            ))}
+          </div>
+        </div>
+      ))}
+
+    </div>
+  </div>
 
 </Layout>
 
 <style>
-  .page-header {
-    padding: 3rem 0 2rem;
-    border-bottom: 1px solid #e5e7eb;
+  .hero {
+    background: var(--color-bg-dark);
+    padding-bottom: var(--space-12);
   }
 
-  .page-header h1 { margin: 0 0 0.5rem; }
+  .hero-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin: 0 0 var(--space-3);
+  }
 
-  .subtitle {
+  .hero-heading {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0 0 var(--space-2);
+  }
+
+  .hero-meta {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.45);
     margin: 0;
-    opacity: 0.7;
   }
 
-  .section {
-    padding: 2.5rem 0;
-    border-bottom: 1px solid #e5e7eb;
+  .content {
+    background: #f8fafc;
+    padding: var(--space-12) 0;
   }
 
-  .section h2 { margin-top: 0; }
+  .group {
+    margin-bottom: var(--space-12);
+  }
+  .group:last-child { margin-bottom: 0; }
+
+  .group-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+
+  .group-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-yellow { background: var(--color-accent); }
+  .dot-blue   { background: var(--color-link); }
+  .dot-gray   { background: rgba(15, 23, 42, 0.25); }
+
+  .group-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+    letter-spacing: -0.01em;
+  }
 
   .project-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-5);
+  }
+
+  .empty {
+    color: rgba(15, 23, 42, 0.45);
+    font-size: 0.95rem;
+    padding: var(--space-10) 0;
+  }
+
+  @media (max-width: 640px) {
+    .project-grid { grid-template-columns: 1fr; }
   }
 </style>

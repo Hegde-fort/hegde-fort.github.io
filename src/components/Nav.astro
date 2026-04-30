@@ -1,17 +1,24 @@
 ---
+import { getEntry } from 'astro:content';
+
 interface Props {
   labName: string;
 }
 
 const { labName } = Astro.props;
 
-const navLinks = [
-  { label: 'About Us',      href: '/about' },
-  { label: 'Team',          href: '/team' },
-  { label: 'Projects',      href: '/projects' },
-  { label: 'Publications',  href: '/publications' },
-  { label: 'News',          href: '/news' },
+const lab = (await getEntry('site', 'lab'))!.data;
+
+// Fall back to hardcoded list if nav hasn't been defined in lab.yaml yet
+const defaultLinks = [
+  { label: 'About Us',     href: '/about',        hidden: false },
+  { label: 'Team',         href: '/team',         hidden: false },
+  { label: 'Projects',     href: '/projects',     hidden: false },
+  { label: 'Publications', href: '/publications', hidden: false },
+  { label: 'News',         href: '/news',         hidden: false },
 ];
+
+const navLinks = (lab.nav ?? defaultLinks).filter(l => !l.hidden);
 
 const currentPath = Astro.url.pathname;
 ---

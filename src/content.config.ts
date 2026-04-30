@@ -17,6 +17,7 @@ const site = defineCollection({
       description: z.string(),
     }),
     about: z.object({
+      heroHeadline: z.string().optional(),
       tagline: z.string().optional(),
       mission: z.string().optional(),
     }),
@@ -40,6 +41,11 @@ const site = defineCollection({
       googleScholar: z.string().url().optional(),
       github: z.string().url().optional(),
     }).optional(),
+    nav: z.array(z.object({
+      label: z.string(),
+      href: z.string(),
+      hidden: z.boolean().default(false),
+    })).optional(),
   }),
 });
 

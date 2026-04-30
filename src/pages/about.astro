@@ -1,89 +1,223 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
 import { getEntry } from 'astro:content';
 
 const lab = (await getEntry('site', 'lab'))!.data;
+const paragraphs = lab.about.mission?.trim().split('\n\n').map(p => p.trim()) ?? [];
 ---
 
-<Layout
-  title="About Us"
-  description={lab.about.tagline ?? lab.description}
->
+<Layout title="About Us" description={lab.description}>
 
-  <section class="page-header">
-    <h1>About Us</h1>
-    {lab.about.tagline && <p class="subtitle">{lab.about.tagline}</p>}
+  <!-- Section 1: hero -->
+  <section class="hero">
+    <div class="section-inner hero-inner">
+      <p class="hero-label">Our Research</p>
+      <h1 class="hero-headline">
+        {lab.about.heroHeadline ?? lab.description}
+      </h1>
+      {paragraphs.map(p => <p class="hero-body">{p}</p>)}
+      <div class="hero-arrow" aria-hidden="true">
+        <svg width="28" height="18" viewBox="0 0 28 18" fill="none">
+          <path d="M2 2l12 13L26 2" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
   </section>
 
-  <!-- ── MISSION ──────────────────────────────────────── -->
-  {lab.about.mission && (
-    <section class="section">
-      <h2>Our Mission</h2>
-      {lab.about.mission.trim().split('\n\n').map(para => (
-        <p>{para.trim()}</p>
-      ))}
-    </section>
-  )}
-
-  <!-- ── RESEARCH AREAS ───────────────────────────────── -->
-  {lab.researchAreas.length > 0 && (
-    <section class="section">
-      <h2>Research Areas</h2>
-      <ul class="research-areas">
-        {lab.researchAreas.map(area => (
-          <li><strong>{area.name}</strong> — {area.description}</li>
+  <!-- Section 2: research themes -->
+  <section class="themes-section">
+    <div class="section-inner">
+      <h2 class="themes-heading">Our research themes</h2>
+      <div class="themes-grid">
+        {lab.researchAreas.map((area, i) => (
+          <div class:list={['theme-card', `theme-card--${i}`]}>
+            <h3 class="theme-name">{area.name}</h3>
+            <p class="theme-desc">{area.description}</p>
+          </div>
         ))}
-      </ul>
-    </section>
-  )}
+      </div>
+    </div>
+  </section>
 
-  <!-- ── AFFILIATIONS ──────────────────────────────────── -->
-  {lab.affiliations.length > 0 && (
-    <section class="section">
-      <h2>Affiliations</h2>
-      <ul class="affiliations">
-        {lab.affiliations.map(a => <li>{a}</li>)}
-      </ul>
-    </section>
-  )}
+  <!-- Section 3: projects + publications cards -->
+  <section class="links-section">
+    <div class="section-inner links-inner">
+      <div class="link-card">
+        <p class="link-label">Projects</p>
+        <h2 class="link-heading">Explore our Research Projects</h2>
+        <p class="link-body">{lab.description}</p>
+        <div class="link-buttons">
+          <Button href="/projects">Current Projects</Button>
+        </div>
+      </div>
 
-  <!-- ── CONTACT ───────────────────────────────────────── -->
-  {(lab.contact?.address || lab.contact?.officeHours) && (
-    <section class="section">
-      <h2>Contact</h2>
-      {lab.contact.address    && <p>{lab.contact.address}</p>}
-      {lab.contact.officeHours && <p>Office hours: {lab.contact.officeHours}</p>}
-    </section>
-  )}
+      <div class="link-card">
+        <p class="link-label">Publications</p>
+        <h2 class="link-heading">Read Our Publications</h2>
+        <p class="link-body">{lab.description}</p>
+        <div class="link-buttons">
+          <Button href="/publications">Publications</Button>
+        </div>
+      </div>
+    </div>
+  </section>
 
 </Layout>
 
 <style>
-  .page-header {
-    padding: 3rem 0 2rem;
-    border-bottom: 1px solid #e5e7eb;
+  /* hero */
+  .hero {
+    background: var(--color-bg-dark);
+    padding-bottom: var(--space-12);
   }
 
-  .page-header h1 { margin: 0 0 0.5rem; }
+  .hero-inner {
+    max-width: 680px;
+  }
 
-  .subtitle {
-    font-size: 1.1rem;
+  .hero-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin: 0 0 var(--space-4);
+  }
+
+  .hero-headline {
+    font-size: clamp(1.8rem, 3.5vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: #ffffff;
+    margin: 0 0 var(--space-6);
+  }
+
+  .hero-body {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0 0 var(--space-3);
+  }
+
+  .hero-arrow {
+    margin-top: var(--space-8);
+    color: var(--color-accent);
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  /* research themes */
+  .themes-section {
+    background: var(--color-bg-panel);
+    padding: var(--space-16) var(--content-pad-x);
+  }
+
+  .themes-heading {
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 800;
+    color: #0f172a;
+    text-align: center;
+    margin: 0 0 var(--space-10);
+  }
+
+  .themes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+    align-items: start;
+    max-width: var(--max-width);
+    margin: 0 auto;
+  }
+
+  /* staircase offset per card */
+  .theme-card--0 { margin-top: 0; }
+  .theme-card--1 { margin-top: 3rem; }
+  .theme-card--2 { margin-top: 6rem; }
+
+  .theme-card {
+    background: #ffffff;
+    border-radius: var(--radius-card);
+    padding: var(--space-8);
+  }
+
+  .theme-name {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 var(--space-4);
+  }
+
+  .theme-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: rgba(15, 23, 42, 0.7);
     margin: 0;
-    opacity: 0.7;
   }
 
-  .section {
-    padding: 2.5rem 0;
-    border-bottom: 1px solid #e5e7eb;
-    max-width: 720px;
+  @media (max-width: 700px) {
+    .themes-grid { grid-template-columns: 1fr; }
+    .theme-card--1, .theme-card--2 { margin-top: 0; }
   }
 
-  .section h2 { margin-top: 0; }
+  /* projects + publications */
+  .links-section {
+    background: var(--color-bg-dark);
+    padding: var(--space-16) var(--content-pad-x);
+  }
 
-  .section p { line-height: 1.75; }
+  .links-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--space-16) var(--content-pad-x);
+  }
 
-  .research-areas, .affiliations {
-    padding-left: 1.25rem;
-    line-height: 2;
+  @media (max-width: 700px) {
+    .links-inner { grid-template-columns: 1fr; }
+  }
+
+  .link-card {
+    background: #ffffff;
+    border-radius: var(--radius-card);
+    border: 2px solid var(--color-link);
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .link-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(15, 23, 42, 0.5);
+    margin: 0;
+  }
+
+  .link-heading {
+    font-size: clamp(1.4rem, 2.2vw, 1.9rem);
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .link-body {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: rgba(15, 23, 42, 0.65);
+    margin: 0;
+    flex: 1;
+  }
+
+  .link-buttons {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    margin-top: var(--space-2);
   }
 </style>

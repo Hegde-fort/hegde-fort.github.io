@@ -18,26 +18,24 @@ hero:
 
 # ── About page ────────────────────────────────────────────────
 about:
-  tagline: "TODO: one-sentence tagline for the lab."
-  # Multi-paragraph mission statement. Use | to preserve line breaks.
+  heroHeadline: "Our aim is to design algorithms for settings that are practical but not well investigated in research literature."
   mission: |
-    TODO: first paragraph of mission statement.
+    The FORT Lab pursues fundamental research in the design and analysis of algorithms for robust and trustworthy machine learning. We focus on problems where principled algorithmic solutions can make AI systems safer, fairer, and more reliable in practice.
 
-    TODO: second paragraph.
+    Our work spans privacy-preserving learning, algorithmic fairness, and robust decision-making under uncertainty — with applications in recommendation systems, healthcare, and beyond.
 
 # ── Research areas (shown on the About page) ──────────────────
 researchAreas:
   - name: "Privacy"
-    description: "Differential privacy, private learning, and data protection."
+    description: "We develop algorithms that enable learning from data while preserving user privacy, ensuring strong guarantees even in complex and dynamic settings."
   - name: "Robustness"
-    description: "Adversarial robustness, distribution shift, and reliable AI."
+    description: "We design methods that remain reliable under uncertainty, distribution shifts, and real-world variability, with a focus on stability and performance."
   - name: "Fairness"
-    description: "Algorithmic fairness, bias mitigation, and equitable outcomes."
+    description: "We study algorithmic approaches to promote equitable outcomes and mitigate bias, particularly in long-term and decision-making systems."
 
 # ── Affiliations (shown on the About page and footer) ─────────
 affiliations:
   - "Department of Computing Science, University of Alberta"
-  - "TODO"
 
 # ── Joining section (shown on the home page) ──────────────────
 joining:
@@ -48,6 +46,21 @@ joining:
 contact:
   address: "TODO"
   officeHours: ""
+
+# ── Nav pages ─────────────────────────────────────────────────
+# Set hidden: true on any entry to remove it from the navbar.
+nav:
+  - label: "About Us"
+    href: "/about"
+  - label: "Team"
+    href: "/team"
+  - label: "Projects"
+    href: "/projects"
+    hidden: true
+  - label: "Publications"
+    href: "/publications"
+  - label: "News"
+    href: "/news"
 
 # ── Social / external links (shown in the footer) ─────────────
 # social:
