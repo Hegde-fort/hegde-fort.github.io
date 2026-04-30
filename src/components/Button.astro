@@ -1,0 +1,32 @@
+---
+interface Props {
+  href: string;
+  variant?: 'solid' | 'outline';
+  /** Stretches to full container width and uses pill radius */
+  fullWidth?: boolean;
+  class?: string;
+}
+
+const { href, variant = 'solid', fullWidth = false, class: className } = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={[
+    variant === 'solid' ? 'btn' : 'btn-outline',
+    { 'btn--full': fullWidth },
+    className,
+  ]}
+>
+  <slot />
+</a>
+
+<style>
+  /* Full-width pill variant (e.g. "Browse All News" in the hero panel) */
+  .btn--full {
+    display: block;
+    width: 100%;
+    text-align: center;
+    border-radius: var(--radius-full);
+  }
+</style>

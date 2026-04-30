@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import PublicationCard from '../components/PublicationCard.astro';
 import NewsCard from '../components/NewsCard.astro';
+import Button from '../components/Button.astro';
 import { getCollection, getEntry } from 'astro:content';
 
 const lab = (await getEntry('site', 'lab'))!.data;
@@ -24,14 +25,14 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
         <p class="lab-label">{lab.name}</p>
         <h1>{lab.hero.headline}</h1>
         <p class="hero-sub">{lab.hero.description}</p>
-        <a class="btn-outline" href="/about">Learn More</a>
+        <Button href="/about">Learn More</Button>
       </div>
 
       <div class="hero-aside">
         <div class="news-preview">
           <h2>News</h2>
           {featuredNews.map(item => <NewsCard item={item} compact={true} />)}
-          <a class="btn btn-news-all" href="/news">Browse All News</a>
+          <Button href="/news" fullWidth={true}>Browse All News</Button>
         </div>
       </div>
     </div>
@@ -41,7 +42,7 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
   <section class="section publication-section">
     <div class="section-inner">
       <h2 class="section-title">Publications</h2>
-      <a class="btn-outline" href="/publications">Browse All</a>
+      <Button href="/publications" variant="outline">Browse All</Button>
       <div class="pub-list">
         {featuredPubs.map(pub => <PublicationCard pub={pub} />)}
       </div>
@@ -56,7 +57,7 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
         <h2>{lab.joining.headline}</h2>
         {lab.joining.blurb && <p>{lab.joining.blurb}</p>}
         <div class="join-buttons">
-          <a class="btn-outline" href="/team">Meet Our Team</a>
+          <Button href="/team" variant="outline">Meet Our Team</Button>
         </div>
       </div>
 
@@ -109,9 +110,9 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
     color: var(--color-text-muted);
   }
 
-  /* ── News preview panel (white card) ───────────────────────── */
+  /* ── News preview panel ────────────────────────────────────── */
   .news-preview {
-    background: var(--color-bg-light);
+    background: var(--color-bg-panel);
     border-radius: var(--radius-card);
     padding: var(--space-6);
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
@@ -120,37 +121,26 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
     color: #0f172a;
     --color-text-primary:  #0f172a;
     --color-text-muted:    rgba(15, 23, 42, 0.55);
-    --color-border:        rgba(15, 23, 42, 0.1);
+    --color-border:        rgba(15, 23, 42, 0.12);
     --color-bg-subtle:     rgba(15, 23, 42, 0.05);
-    --color-accent:        #c49a00;
+  }
+
+  .news-preview :global(.news-card + .news-card) {
+    margin-top: var(--space-3);
   }
 
   .news-preview h2 {
-    margin: 0 0 var(--space-2);
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
+    margin: 0 0 var(--space-4);
+    font-size: 1.4rem;
+    font-weight: 800;
+    text-align: center;
+    letter-spacing: 0.04em;
     color: #0f172a;
   }
 
-  .btn-news-all {
-    display: block;
-    text-align: center;
+  .news-preview :global(.btn--full) {
     margin-top: var(--space-4);
-    width: 100%;
-    background: #F2C94C;
-    color: #0f172a;
-    border-radius: var(--radius-md);
-    padding: 0.65rem 1.4rem;
-    font-weight: 700;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    text-decoration: none;
-    transition: background 0.15s ease;
   }
-  .btn-news-all:hover { background: #E0B93A; }
 
   /* ── Sections ──────────────────────────────────────────────── */
   .section {
@@ -167,6 +157,15 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
 
   .publication-section {
     background: var(--color-bg-surface);
+    border-top: none;
+
+    /* Override CSS var tokens so child components use dark text */
+    color: #0f172a;
+    --color-text-primary:  #0f172a;
+    --color-text-muted:    rgba(15, 23, 42, 0.55);
+    --color-border:        rgba(15, 23, 42, 0.1);
+    --color-bg-subtle:     rgba(15, 23, 42, 0.05);
+    --color-accent:        #c49a00;
   }
 
   .pub-list { margin-top: 1.5rem; }
