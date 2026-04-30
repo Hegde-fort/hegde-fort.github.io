@@ -24,14 +24,14 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
         <p class="lab-label">{lab.name}</p>
         <h1>{lab.hero.headline}</h1>
         <p class="hero-sub">{lab.hero.description}</p>
-        <a class="btn" href="/about">Learn More</a>
+        <a class="btn-outline" href="/about">Learn More</a>
       </div>
 
       <div class="hero-aside">
         <div class="news-preview">
           <h2>News</h2>
-          {featuredNews.map(item => <NewsCard item={item} />)}
-          <a class="btn-outline" href="/news">Browse All News</a>
+          {featuredNews.map(item => <NewsCard item={item} compact={true} />)}
+          <a class="btn btn-news-all" href="/news">Browse All News</a>
         </div>
       </div>
     </div>
@@ -68,8 +68,8 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
 </Layout>
 
 <style>
+  /* ── Hero ──────────────────────────────────────────────────── */
   .hero {
-    /* pull hero up so it starts at the very top, behind the fixed nav */
     margin-top: calc(-1 * var(--nav-height));
     padding-top: calc(var(--nav-height) + 4rem);
     padding-bottom: 4rem;
@@ -87,27 +87,72 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
   }
 
   .lab-label {
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.8rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin: 0 0 0.5rem;
+    letter-spacing: 0.1em;
+    margin: 0 0 0.75rem;
+    color: var(--color-accent);
   }
 
   .hero-text h1 {
-    font-size: clamp(1.75rem, 4vw, 2.5rem);
-    line-height: 1.2;
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1.15;
     margin: 0 0 1rem;
   }
 
   .hero-sub {
     font-size: 0.95rem;
     line-height: 1.7;
-    margin: 0 0 1.5rem;
+    margin: 0 0 1.75rem;
+    color: var(--color-text-muted);
   }
 
-  .news-preview h2 { margin-top: 0; }
+  /* ── News preview panel (white card) ───────────────────────── */
+  .news-preview {
+    background: var(--color-bg-light);
+    border-radius: var(--radius-card);
+    padding: var(--space-6);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
 
+    /* Override CSS var tokens so child components use dark text */
+    color: #0f172a;
+    --color-text-primary:  #0f172a;
+    --color-text-muted:    rgba(15, 23, 42, 0.55);
+    --color-border:        rgba(15, 23, 42, 0.1);
+    --color-bg-subtle:     rgba(15, 23, 42, 0.05);
+    --color-accent:        #c49a00;
+  }
+
+  .news-preview h2 {
+    margin: 0 0 var(--space-2);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #0f172a;
+  }
+
+  .btn-news-all {
+    display: block;
+    text-align: center;
+    margin-top: var(--space-4);
+    width: 100%;
+    background: #F2C94C;
+    color: #0f172a;
+    border-radius: var(--radius-md);
+    padding: 0.65rem 1.4rem;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+  .btn-news-all:hover { background: #E0B93A; }
+
+  /* ── Sections ──────────────────────────────────────────────── */
   .section {
     border-top: 1px solid var(--color-border);
   }
@@ -121,11 +166,12 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
   .section-title { margin: 0 0 0.5rem; }
 
   .publication-section {
-    background: orange;
+    background: var(--color-bg-surface);
   }
 
   .pub-list { margin-top: 1.5rem; }
 
+  /* ── Join CTA ──────────────────────────────────────────────── */
   .join-inner {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -139,6 +185,7 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin: 0 0 0.25rem;
+    color: var(--color-accent);
   }
 
   .join-text h2 { margin: 0 0 1rem; }
@@ -152,7 +199,7 @@ const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.f
 
   .join-photo-placeholder {
     background: var(--color-bg-subtle);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-card);
     border: 1px solid var(--color-border);
     height: 300px;
     display: flex;
