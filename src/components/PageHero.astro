@@ -1,0 +1,49 @@
+---
+/**
+ * Standard dark-background page hero used across listing pages
+ * (Publications, Projects, News, …).
+ *
+ * Props:
+ *   eyebrow — small uppercase label above the title
+ *   title   — the main <h1> heading
+ *
+ * Slot: optional content rendered below the heading (e.g. a meta line).
+ */
+interface Props {
+  eyebrow: string;
+  title: string;
+}
+
+const { eyebrow, title } = Astro.props;
+---
+
+<section class="hero">
+  <div class="section-inner">
+    <p class="hero-label">{eyebrow}</p>
+    <h1 class="hero-heading">{title}</h1>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .hero {
+    background: var(--color-bg-dark);
+    padding-bottom: var(--space-12);
+  }
+
+  .hero-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin: 0 0 var(--space-3);
+  }
+
+  .hero-heading {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+  }
+</style>

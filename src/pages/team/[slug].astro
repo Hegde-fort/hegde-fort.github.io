@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import PublicationCard from '../../components/PublicationCard.astro';
 import { getCollection } from 'astro:content';
 import { Icon } from 'astro-icon/components';
+import { ROLE_LABELS, buildTenure, buildLinks, buildInitials } from '../../lib/team';
 
 export async function getStaticPaths() {
   const members = await getCollection('team', m => !m.data.draft);
@@ -16,36 +17,13 @@ const { member } = Astro.props;
 const {
   name, role, bio, degree,
   projectTitle, projectDescription,
-  startDate, endDate,
-  website, googleScholar, github, linkedin,
   photo, alumni, currentStatus,
 } = member.data;
 
-const roleLabel: Record<string, string> = {
-  'Faculty':                'Principal Investigator',
-  'Postdoctoral Researcher':'Postdoctoral Researcher',
-  'PhD Student':            'PhD Student',
-  "Master's Student":       "Master's Student",
-  'Undergraduate Student':  'Undergraduate Student',
-  'Research Assistant':     'Research Assistant',
-  'Visiting Researcher':    'Visiting Researcher',
-};
-const displayRole = (alumni ? 'Alumni — ' : '') + (roleLabel[role] ?? role);
-
-const tenureStart = startDate ?? (member.data as any).startYear?.toString();
-const tenureEnd   = endDate ?? (alumni ? undefined : 'Present');
-const tenure = tenureStart
-  ? tenureEnd ? `${tenureStart} – ${tenureEnd}` : tenureStart
-  : null;
-
-const links = [
-  website       && { href: website,       icon: 'lucide:globe',               label: 'Website' },
-  googleScholar && { href: googleScholar,  icon: 'simple-icons:googlescholar', label: 'Google Scholar' },
-  github        && { href: github,         icon: 'simple-icons:github',        label: 'GitHub' },
-  linkedin      && { href: linkedin,       icon: 'simple-icons:linkedin',      label: 'LinkedIn' },
-].filter(Boolean) as { href: string; icon: string; label: string }[];
-
-const initials = name.split(' ').map((n: string) => n[0]).join('');
+const displayRole = (alumni ? 'Alumni — ' : '') + (ROLE_LABELS[role] ?? role);
+const tenure      = buildTenure(member.data);
+const links       = buildLinks(member.data);
+const initials    = buildInitials(name);
 
 // OG image: use the member's photo if available, else fall back to lab logo
 const ogImage = photo
@@ -53,7 +31,6 @@ const ogImage = photo
   : undefined;
 
 const bioSnippet = bio ? bio.slice(0, 160) + (bio.length > 160 ? '…' : '') : undefined;
-const slug = member.id.replace(/\/index$/, '');
 
 const allPubs = await getCollection('publications', p => !p.data.draft);
 const memberPubs = allPubs

@@ -3,20 +3,9 @@ import Layout from '../layouts/Layout.astro';
 import TeamCard from '../components/TeamCard.astro';
 import EmptyState from '../components/EmptyState.astro';
 import { getCollection } from 'astro:content';
+import { ROLE_ORDER, ROLE_LABELS_PLURAL } from '../lib/team';
 
 const allMembers = await getCollection('team', m => !m.data.draft);
-
-// Roles shown in this order under active members
-const roleOrder = [
-  'Faculty',
-  'Postdoctoral Researcher',
-  'PhD Student',
-  "Master's Student",
-  'Undergraduate Student',
-  'Research Assistant',
-  'Visiting Researcher',
-  'Other',
-] as const;
 
 const alpha = (a: { data: { name: string } }, b: { data: { name: string } }) =>
   a.data.name.localeCompare(b.data.name);
@@ -50,31 +39,19 @@ const byEndDateDesc = (
 const active = allMembers.filter(m => !m.data.alumni);
 const alumni = allMembers.filter(m =>  m.data.alumni);
 
-const activeGrouped = roleOrder
+const activeGrouped = ROLE_ORDER
   .map(role => ({
     role,
     members: active.filter(m => m.data.role === role).sort(alpha),
   }))
   .filter(g => g.members.length > 0);
 
-const alumniGrouped = roleOrder
+const alumniGrouped = ROLE_ORDER
   .map(role => ({
     role,
     members: alumni.filter(m => m.data.role === role).sort(byEndDateDesc),
   }))
   .filter(g => g.members.length > 0);
-
-// Plural display labels for role headings
-const roleLabel: Record<string, string> = {
-  'Faculty':                'Principal Investigator',
-  'Postdoctoral Researcher':'Postdoctoral Researchers',
-  'PhD Student':            'PhD Students',
-  "Master's Student":       "Master's Students",
-  'Undergraduate Student':  'Undergraduate Students',
-  'Research Assistant':     'Research Assistants',
-  'Visiting Researcher':    'Visiting Researchers',
-  'Other':                  'Other',
-};
 
 // Group photos shown in the hero strip
 const heroPhotos = [
@@ -109,7 +86,7 @@ const heroPhotos = [
 
       {activeGrouped.map(({ role, members }) => (
         <section class="role-section">
-          <h2 class="role-heading">{roleLabel[role] ?? role}</h2>
+          <h2 class="role-heading">{ROLE_LABELS_PLURAL[role] ?? role}</h2>
           <div class="group-box">
             {role === 'Faculty' ? (
               <div class="faculty-grid">
@@ -131,7 +108,7 @@ const heroPhotos = [
           <div class="group-box">
             {alumniGrouped.map(({ role, members }) => (
               <div class="alumni-group">
-                <h3 class="alumni-role">{roleLabel[role] ?? role}</h3>
+                <h3 class="alumni-role">{ROLE_LABELS_PLURAL[role] ?? role}</h3>
                 <div class="member-grid">
                   {members.map(m => <TeamCard member={m} />)}
                 </div>

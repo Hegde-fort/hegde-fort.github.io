@@ -1,6 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components';
 import type { CollectionEntry } from 'astro:content';
+import { buildTenure, buildLinks, buildInitials } from '../lib/team';
 
 interface Props {
   member: CollectionEntry<'team'>;
@@ -8,29 +9,11 @@ interface Props {
 }
 
 const { member, size = 'default' } = Astro.props;
-const {
-  name, bio,
-  projectTitle,
-  startDate, endDate,
-  website, googleScholar, github, linkedin,
-  photo, alumni,
-} = member.data;
+const { name, bio, projectTitle, photo } = member.data;
 
-const initials = name.split(' ').map((n: string) => n[0]).join('');
-
-const tenureStart = startDate ?? (member.data as any).startYear?.toString();
-const tenureEnd   = endDate ?? (alumni ? undefined : 'Present');
-const tenure = tenureStart
-  ? tenureEnd ? `${tenureStart} – ${tenureEnd}` : tenureStart
-  : null;
-
-const links = [
-  website       && { href: website,       icon: 'lucide:globe',               label: 'Website' },
-  googleScholar && { href: googleScholar,  icon: 'simple-icons:googlescholar', label: 'Google Scholar' },
-  github        && { href: github,         icon: 'simple-icons:github',        label: 'GitHub' },
-  linkedin      && { href: linkedin,       icon: 'simple-icons:linkedin',      label: 'LinkedIn' },
-].filter(Boolean) as { href: string; icon: string; label: string }[];
-
+const initials    = buildInitials(name);
+const tenure      = buildTenure(member.data);
+const links       = buildLinks(member.data);
 const profileSlug = member.id.replace(/\/index$/, '');
 ---
 

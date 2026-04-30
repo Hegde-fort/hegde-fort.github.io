@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import EmptyState from '../components/EmptyState.astro';
 import { getCollection } from 'astro:content';
@@ -31,17 +32,13 @@ const groups = (
 
 <Layout title="Projects" description="Research projects from the FORT Lab.">
 
-  <section class="hero">
-    <div class="section-inner">
-      <p class="hero-label">Research</p>
-      <h1 class="hero-heading">Projects</h1>
-      <p class="hero-meta">
-        {active.length > 0 && `${active.length} active`}
-        {active.length > 0 && completed.length > 0 && ' · '}
-        {completed.length > 0 && `${completed.length} completed`}
-      </p>
-    </div>
-  </section>
+  <PageHero eyebrow="Research" title="Projects">
+    <p class="hero-meta">
+      {active.length > 0 && `${active.length} active`}
+      {active.length > 0 && completed.length > 0 && ' · '}
+      {completed.length > 0 && `${completed.length} completed`}
+    </p>
+  </PageHero>
 
   <div class="content surface-light">
     <div class="section-inner">
@@ -68,27 +65,6 @@ const groups = (
 </Layout>
 
 <style>
-  .hero {
-    background: var(--color-bg-dark);
-    padding-bottom: var(--space-12);
-  }
-
-  .hero-label {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--color-accent);
-    margin: 0 0 var(--space-3);
-  }
-
-  .hero-heading {
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 800;
-    color: #ffffff;
-    margin: 0 0 var(--space-2);
-  }
-
   .hero-meta {
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.45);

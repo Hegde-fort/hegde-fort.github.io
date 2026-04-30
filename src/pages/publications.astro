@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
 import PublicationCard from '../components/PublicationCard.astro';
 import EmptyState from '../components/EmptyState.astro';
 import { getCollection } from 'astro:content';
@@ -8,18 +9,11 @@ const allPubs = await getCollection('publications', p => !p.data.draft);
 const sorted  = allPubs.sort((a, b) => b.data.year - a.data.year);
 const years   = [...new Set(sorted.map(p => p.data.year))];
 const byYear  = years.map(year => ({ year, pubs: sorted.filter(p => p.data.year === year) }));
-const total   = allPubs.length;
 ---
 
 <Layout title="Publications" description="Research publications from the FORT Lab.">
 
-  <section class="hero">
-    <div class="section-inner">
-      <p class="hero-label">Research Output</p>
-      <h1 class="hero-heading">Publications</h1>
-      <p class="hero-meta">{total} paper{total !== 1 ? 's' : ''} across {years.length} year{years.length !== 1 ? 's' : ''}</p>
-    </div>
-  </section>
+  <PageHero eyebrow="Research Output" title="Publications" />
 
   {allPubs.length === 0 ? (
     <div class="content surface-light">
@@ -85,33 +79,6 @@ const total   = allPubs.length;
 </script>
 
 <style>
-  .hero {
-    background: var(--color-bg-dark);
-    padding-bottom: var(--space-12);
-  }
-
-  .hero-label {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--color-accent);
-    margin: 0 0 var(--space-3);
-  }
-
-  .hero-heading {
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 800;
-    color: #ffffff;
-    margin: 0 0 var(--space-2);
-  }
-
-  .hero-meta {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.45);
-    margin: 0;
-  }
-
   /* ── Filter bar ──────────────────────────────────────────── */
   .filter-bar {
     border-bottom: 1px solid rgba(15, 23, 42, 0.08);
