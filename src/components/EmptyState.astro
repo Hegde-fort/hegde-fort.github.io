@@ -3,11 +3,10 @@ interface Props {
   message?: string;
 }
 
-const { message = "This page is still under construction — check back soon!" } = Astro.props;
+const { message = "This page is still under construction. Check back soon!" } = Astro.props;
 ---
 
 <div class="empty-state">
-  <span class="empty-icon" aria-hidden="true">🚧</span>
   <p class="empty-title">Coming soon</p>
   <p class="empty-body">{message}</p>
 </div>
@@ -16,12 +15,6 @@ const { message = "This page is still under construction — check back soon!" }
   .empty-state {
     padding: var(--space-16) 0;
     text-align: center;
-  }
-
-  .empty-icon {
-    font-size: 2.5rem;
-    display: block;
-    margin-bottom: var(--space-4);
   }
 
   .empty-title {
