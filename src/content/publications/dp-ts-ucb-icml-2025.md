@@ -10,5 +10,5 @@ authors:
 venue: "Proceedings of the 42nd International Conference on Machine Learning (ICML 2025)"
 year: 2025
 url: "https://proceedings.mlr.press/v267/hu25k.html"
-featured: false
+featured: true
 ---

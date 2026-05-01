@@ -11,5 +11,5 @@ authors:
 venue: "International Conference on Artificial Intelligence and Statistics (AISTATS 2026)"
 year: 2026
 url: "https://openreview.net/forum?id=tgnnCHVGxd"
-featured: false
+featured: true
 ---

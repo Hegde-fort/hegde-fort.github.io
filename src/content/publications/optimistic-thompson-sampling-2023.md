@@ -9,5 +9,5 @@ authors:
 venue: "Proceedings of the Thirty-Ninth Conference on Uncertainty in Artificial Intelligence (UAI 2023)"
 year: 2023
 url: "https://proceedings.mlr.press/v216/hu23a.html"
-featured: false
+featured: true
 ---
