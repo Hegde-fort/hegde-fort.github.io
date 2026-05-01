@@ -17,7 +17,7 @@ export async function getStaticPaths() {
 const { member } = Astro.props;
 const {
   name, role, bio, degree,
-  projectTitle, projectDescription,
+  projects,
   photo, alumni, currentStatus,
 } = member.data;
 
@@ -31,7 +31,12 @@ const ogImage = photo
   ? new URL(photo.src, Astro.site).href
   : undefined;
 
-const bioSnippet = bio ? bio.slice(0, 160) + (bio.length > 160 ? '…' : '') : undefined;
+const firstProject = projects?.[0];
+const bioSnippet = firstProject
+  ? firstProject.title.slice(0, 160)
+  : bio
+    ? bio.slice(0, 160) + (bio.length > 160 ? '…' : '')
+    : undefined;
 
 const allPubs = await getCollection('publications', p => !p.data.draft);
 const memberPubs = allPubs
@@ -75,15 +80,21 @@ const memberPubs = allPubs
         </div>
       </div>
 
-      {projectTitle && (
+      {projects && projects.length > 0 && (
         <div class="section">
-          <p class="section-label">Project</p>
-          <p class="project-title">{projectTitle}</p>
-          {projectDescription && <p class="project-desc">{projectDescription}</p>}
+          <p class="section-label">{projects.length === 1 ? 'Project' : 'Projects'}</p>
+          <div class="project-list">
+            {projects.map(p => (
+              <div class="project-item">
+                <p class="project-title">{p.title}</p>
+                {p.description && <p class="project-desc">{p.description}</p>}
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
-      {bio && (
+      {bio && !(projects && projects.length > 0) && (
         <div class="section">
           <p class="section-label">About</p>
           <p class="bio">{bio}</p>
@@ -242,11 +253,19 @@ const memberPubs = allPubs
     gap: var(--space-3);
   }
 
+  .project-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .project-item { display: flex; flex-direction: column; gap: var(--space-1); }
+
   .project-title {
     font-size: 0.95rem;
     font-weight: 700;
     color: var(--color-link);
-    margin: 0 0 var(--space-1);
+    margin: 0;
   }
 
   .project-desc, .bio {

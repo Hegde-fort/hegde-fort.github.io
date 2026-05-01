@@ -10,7 +10,7 @@ interface Props {
 }
 
 const { member, size = 'default' } = Astro.props;
-const { name, bio, projectTitle, photo } = member.data;
+const { name, bio, projects, photo } = member.data;
 
 const initials    = buildInitials(name);
 const tenure      = buildTenure(member.data);
@@ -28,9 +28,15 @@ const profileSlug = member.id.replace(/\/index$/, '');
 
   <div class="info">
     <h3 class="name">{name}</h3>
-    {tenure       && <p class="tenure">{tenure}</p>}
-    {projectTitle && <p class="project-label"><span class="project-prefix">Project:</span> {projectTitle}</p>}
-    {bio          && <p class="bio-preview">{bio}</p>}
+    {tenure && <p class="tenure">{tenure}</p>}
+    {projects && projects.length > 0
+      ? <ul class="project-list">
+          {projects.map(p => (
+            <li class="project-label"><span class="project-prefix">Project:</span> {p.title}</li>
+          ))}
+        </ul>
+      : bio && <p class="bio-preview">{bio}</p>
+    }
 
     <a class="read-more-link" href={`/team/${profileSlug}`}>Read more</a>
 
@@ -108,8 +114,17 @@ const profileSlug = member.id.replace(/\/index$/, '');
     color: rgba(15, 23, 42, 0.45);
   }
 
+  .project-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-2);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
   .project-label {
-    margin: 0 0 var(--space-1);
+    margin: 0;
     font-size: 0.76rem;
     color: rgba(15, 23, 42, 0.7);
   }

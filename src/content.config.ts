@@ -82,13 +82,15 @@ const team = defineCollection({
         'Other',
       ]),
       photo: image().optional(),
-      // Short bio or research interests
+      // Short bio or research interests (for members without discrete projects)
       bio: z.string().optional(),
       // Their degree (e.g. "BSc Computer Science, University of Alberta")
       degree: z.string().optional(),
-      // Active project info
-      projectTitle: z.string().optional(),
-      projectDescription: z.string().optional(),
+      // Projects — supports multiple entries; replaces the old projectTitle/projectDescription fields
+      projects: z.array(z.object({
+        title: z.string(),
+        description: z.string().optional(),
+      })).optional(),
       // Contact / profile links
       website: z.string().url().optional(),
       googleScholar: z.string().url().optional(),

@@ -5,8 +5,9 @@ role: "Undergraduate Student"   # the role they held while in the lab
 # photo: ./photo.jpg
 bio: "What they worked on while in the lab."
 degree: "BSc Computer Science, University of Alberta (2024)"
-projectTitle: "Project they worked on"
-projectDescription: "Short description of their project."
+projects:
+  - title: "Project they worked on"
+    description: "Short description of their project."
 linkedin: "https://linkedin.com/in/username"
 startYear: 2023
 alumni: true
