@@ -250,7 +250,15 @@ const memberPubs = allPubs
   .pub-list {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--space-5);
+  }
+
+  .pub-list :global(.pub-card) {
+    box-shadow: 0 0 0 1.5px var(--color-accent);
+  }
+
+  .pub-list :global(.pub-card:hover) {
+    box-shadow: 0 0 0 1.5px var(--color-accent), 0 4px 16px rgba(15, 23, 42, 0.1);
   }
 
   .project-list {
