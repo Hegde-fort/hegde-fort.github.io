@@ -165,7 +165,7 @@ const currentPath = Astro.url.pathname;
       background: rgba(4, 23, 38, 0.97);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      padding: 1rem 0 1.5rem;
+      padding: 1rem 0;
       border-top: 1px solid rgba(255,255,255,0.08);
     }
 
@@ -182,6 +182,10 @@ const currentPath = Astro.url.pathname;
       padding: 0.85rem var(--content-pad-x);
       font-size: 1rem;
       border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .nav-links li:last-child .nav-link {
+      border-bottom: none;
     }
   }
 </style>
