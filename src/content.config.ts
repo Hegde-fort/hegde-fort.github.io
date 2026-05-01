@@ -122,8 +122,6 @@ const publications = defineCollection({
     year: z.number(),
     url: z.string().url().optional(),
     code: z.string().url().optional(),
-    abstract: z.string().optional(),
-    tags: z.array(z.string()).default([]),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
   }),
