@@ -30,7 +30,18 @@ const site = defineCollection({
     joining: z.object({
       headline: z.string(),
       blurb: z.string().optional(),
+      photo: z.object({
+        src: z.string(),
+        alt: z.string(),
+      }).optional(),
     }),
+    teamPage: z.object({
+      heading: z.string().default('Meet the team!'),
+      heroPhotos: z.array(z.object({
+        src: z.string(),
+        alt: z.string(),
+      })).default([]),
+    }).optional(),
     contact: z.object({
       email: z.string().optional(),
       address: z.string().optional(),

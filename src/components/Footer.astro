@@ -1,22 +1,22 @@
 ---
-// astro-icon import kept here — Icon is used on the team page
-// import { Icon } from 'astro-icon/components';
-
 interface Props {
   labName: string;
   affiliations: string[];
+  nav?: { label: string; href: string; hidden?: boolean }[];
 }
 
-const { labName, affiliations } = Astro.props;
+const { labName, affiliations, nav } = Astro.props;
 const currentYear = new Date().getFullYear();
 
-const navLinks = [
-  { label: 'Home',         href: '/' },
-  { label: 'About',        href: '/about' },
-  { label: 'Team',         href: '/team' },
-  { label: 'Publications', href: '/publications' },
-  { label: 'News',         href: '/news' },
+const defaultLinks = [
+  { label: 'Home',         href: '/',              hidden: false },
+  { label: 'About Us',     href: '/about',         hidden: false },
+  { label: 'Team',         href: '/team',          hidden: false },
+  { label: 'Publications', href: '/publications',  hidden: false },
+  { label: 'News',         href: '/news',          hidden: false },
 ];
+
+const navLinks = (nav ?? defaultLinks).filter(l => !l.hidden);
 ---
 
 <footer class="surface-light">

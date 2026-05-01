@@ -24,14 +24,14 @@ const remaining = allNews.filter(n => n !== featured);
 
       {featured && (
         <div class="featured-wrap">
-          <p class="section-label">Featured</p>
+          <p class="list-label">Featured</p>
           <NewsCard item={featured} featured />
         </div>
       )}
 
       {remaining.length > 0 && (
         <div class="grid-wrap">
-          <p class="grid-label">Latest News</p>
+          <p class="list-label">Latest News</p>
           <div class="news-grid">
             {remaining.map(item => <NewsCard item={item} />)}
           </div>
@@ -53,22 +53,13 @@ const remaining = allNews.filter(n => n !== featured);
     margin-bottom: var(--space-12);
   }
 
-  .section-label {
+  .list-label {
     font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--color-link);
     margin: 0 0 var(--space-4);
-  }
-
-  .grid-label {
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-link);
-    margin: 0 0 var(--space-5);
   }
 
   .news-grid {

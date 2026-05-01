@@ -10,19 +10,21 @@ const lab = (await getEntry('site', 'lab'))!.data;
     <div class="join-text">
       <p class="join-label">Joining</p>
       <h2>{lab.joining.headline}</h2>
-      <p class="join-desc">{lab.description}</p>
+      <p class="join-desc">{lab.joining.blurb ?? lab.description}</p>
       <div class="join-buttons">
         <Button href="/about">Contact Us</Button>
         <Button href="/team">Meet Our Team</Button>
       </div>
     </div>
 
-    <div class="photo-frame">
-      <img
-        src="/images/teamPhotos/Summer2022_teamlunch.jpg"
-        alt="FORT Lab team lunch, Summer 2022"
-      />
-    </div>
+    {lab.joining.photo && (
+      <div class="photo-frame">
+        <img
+          src={lab.joining.photo.src}
+          alt={lab.joining.photo.alt}
+        />
+      </div>
+    )}
   </div>
 </section>
 

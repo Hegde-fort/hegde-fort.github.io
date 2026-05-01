@@ -42,11 +42,25 @@ affiliations:
 joining:
   headline: "Interested In Joining Our Team?"
   blurb: "TODO: short blurb about what you look for in prospective students/researchers."
+  photo:
+    src: "/images/teamPhotos/Summer2022_teamlunch.jpg"
+    alt: "FORT Lab team lunch, Summer 2022"
 
 # ── Contact (shown on the About page) ─────────────────────────
 contact:
   address: "TODO"
   officeHours: ""
+
+# ── Team page ─────────────────────────────────────────────────
+teamPage:
+  heading: "Meet the FORT Lab!"
+  heroPhotos:
+    - src: "/images/teamPhotos/IMG_2323.jpg"
+      alt: "FORT Lab team"
+    - src: "/images/teamPhotos/Summer2022_teamlunch.jpg"
+      alt: "Team lunch, Summer 2022"
+    - src: "/images/teamPhotos/PXL_20250411_210215580.jpg"
+      alt: "FORT Lab team 2025"
 
 # ── Nav pages ─────────────────────────────────────────────────
 # Set hidden: true on any entry to remove it from the navbar.

@@ -2,9 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import TeamCard from '../components/TeamCard.astro';
 import EmptyState from '../components/EmptyState.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import { ROLE_ORDER, ROLE_LABELS_PLURAL } from '../lib/team';
 
+const lab = (await getEntry('site', 'lab'))!.data;
 const allMembers = await getCollection('team', m => !m.data.draft);
 
 const alpha = (a: { data: { name: string } }, b: { data: { name: string } }) =>
@@ -53,12 +54,8 @@ const alumniGrouped = ROLE_ORDER
   }))
   .filter(g => g.members.length > 0);
 
-// Group photos shown in the hero strip
-const heroPhotos = [
-  { src: '/images/teamPhotos/IMG_2323.jpg',                   alt: 'FORT Lab team' },
-  { src: '/images/teamPhotos/Summer2022_teamlunch.jpg',       alt: 'Team lunch, Summer 2022' },
-  { src: '/images/teamPhotos/PXL_20250411_210215580.jpg',     alt: 'FORT Lab team 2025' },
-];
+const heroPhotos = lab.teamPage?.heroPhotos ?? [];
+const teamHeading = lab.teamPage?.heading ?? `Meet the ${lab.shortName ?? lab.name}!`;
 ---
 
 <Layout title="Team" description="Meet the members of the FORT Lab.">
@@ -73,7 +70,7 @@ const heroPhotos = [
       ))}
     </div>
     <div class="hero-title-wrap">
-      <h1 class="hero-heading">Meet the FORT Lab!</h1>
+      <h1 class="hero-heading">{teamHeading}</h1>
       <div class="hero-underline" aria-hidden="true"></div>
     </div>
   </section>
@@ -88,8 +85,8 @@ const heroPhotos = [
         <section class="role-section">
           <h2 class="role-heading">{ROLE_LABELS_PLURAL[role] ?? role}</h2>
           <div class="group-box">
-            <div class="member-grid">
-              {members.map(m => <TeamCard member={m} />)}
+            <div class:list={['member-grid', { 'member-grid--faculty': role === 'Faculty' }]}>
+              {members.map(m => <TeamCard member={m} size={role === 'Faculty' ? 'large' : 'default'} />)}
             </div>
           </div>
         </section>
@@ -219,6 +216,13 @@ const heroPhotos = [
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     column-gap: var(--space-8);
     row-gap: 0;
+  }
+
+  /* Principal Investigator — single centered card spanning full width */
+  .member-grid--faculty {
+    grid-template-columns: 1fr;
+    max-width: 560px;
+    margin: 0 auto;
   }
 
   /* ── Alumni ─────────────────────────────────────────────────── */
