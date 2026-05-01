@@ -66,12 +66,12 @@
    uses --content-pad-x or --space-16 for section padding.     */
 @media (max-width: 700px) {
   :root {
-    --content-pad-x: 1rem;
+    --content-pad-x: 1.5rem;
   }
 }
 
 @media (max-width: 400px) {
   :root {
-    --content-pad-x: 0.75rem;
+    --content-pad-x: 1.25rem;
   }
 }

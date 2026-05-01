@@ -12,7 +12,7 @@ export async function getStaticPaths() {
 }
 
 const { item } = Astro.props;
-const { title, date, summary, image } = item.data;
+const { title, date, summary, image, imageAlt } = item.data;
 const { Content } = await render(item);
 
 const formattedDate = date.toLocaleDateString('en-CA', {
@@ -33,7 +33,7 @@ const formattedDate = date.toLocaleDateString('en-CA', {
     </header>
 
     {image && (
-      <img class="hero-image" src={image.src} alt={title} />
+      <img class="hero-image" src={image.src} alt={imageAlt || title} />
     )}
 
     <div class="article-body">
@@ -47,7 +47,15 @@ const formattedDate = date.toLocaleDateString('en-CA', {
   .news-article {
     max-width: 720px;
     margin: 0 auto;
-    padding: 2rem 0;
+    padding: var(--space-12) var(--content-pad-x);
+  }
+
+  @media (max-width: 700px) {
+    .news-article {
+      padding-top: var(--space-6);
+      padding-left: var(--content-pad-x);
+      padding-right: var(--content-pad-x);
+    }
   }
 
   .back-link {

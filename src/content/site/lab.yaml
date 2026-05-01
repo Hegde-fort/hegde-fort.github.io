@@ -6,6 +6,7 @@
 # ---------------------------------------------------------------
 
 name: "FORT Lab"
+shortName: "FORT"
 fullName: "Foundations of Robust and Trustworthy Algorithms for Machine Learning"
 
 # Used as the default meta description and the hero subtitle

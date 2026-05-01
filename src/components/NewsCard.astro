@@ -8,12 +8,15 @@ interface Props {
 }
 
 const { item, compact = false, featured = false } = Astro.props;
-const { title, date, summary, image, externalUrl } = item.data;
+const { title, date, summary, image, imageAlt, externalUrl } = item.data;
 
 const href       = externalUrl ?? `/news/${item.id}`;
 const isExternal = !!externalUrl;
+const linkProps  = { href, target: isExternal ? '_blank' : undefined, rel: isExternal ? 'noopener noreferrer' : undefined };
 
 const monthYear = date.toLocaleDateString('en-CA', { year: 'numeric', month: 'short' });
+const altText   = imageAlt || title;
+const imgSrc    = image?.src;
 ---
 
 <article class:list={['news-card', {
@@ -21,81 +24,68 @@ const monthYear = date.toLocaleDateString('en-CA', { year: 'numeric', month: 'sh
   'news-card--featured': featured,
 }]}>
 
-  {/* ── Compact (home page hero) ───────────────────────── */}
+  {/* ── Compact (home page hero panel) ─────────────────── */}
   {compact && (
     <>
       {image && (
-        <a class="thumb-link" href={href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener' : undefined}>
-          <img class="news-thumb" src={image.src} alt={title} />
+        <a class="thumb-link" {...linkProps}>
+          <img class="news-thumb" src={imgSrc} alt={altText} loading="lazy" />
         </a>
       )}
       <div class="news-body">
-        <h3 class="title">{title}</h3>
+        <h3 class="title">
+          <a {...linkProps}>{title}</a>
+        </h3>
         <p class="summary">{summary}</p>
-        <a class="read-link" href={href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener' : undefined}>
-          Read Article
-        </a>
       </div>
     </>
   )}
 
-  {/* ── Featured (top of /news) ─────────────────────────── */}
+  {/* ── Featured hero card (top of /news) ──────────────── */}
   {featured && (
-    <div class="featured-inner">
-      {image && (
-        <a class="featured-img-wrap" href={href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener' : undefined}>
-          <img src={image.src} alt={title} />
-        </a>
-      )}
-      <div class="featured-body">
-        <time datetime={date.toISOString()} class="date-pill">{monthYear}</time>
-        <h2 class="featured-title">
-          <a href={href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener' : undefined}>
-            {title}
-          </a>
-        </h2>
-        <p class="featured-summary">{summary}</p>
-        <a class="read-link" href={href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener' : undefined}>
-          Read Article
-        </a>
+    <a class="featured-link" {...linkProps}>
+      <div class="featured-inner">
+        <div class="featured-img-side">
+          {imgSrc
+            ? <img src={imgSrc} alt={altText} loading="eager" />
+            : <div class="featured-img-placeholder" />}
+        </div>
+        <div class="featured-body">
+          <time datetime={date.toISOString()} class="date-pill">{monthYear}</time>
+          <h2 class="featured-title">{title}</h2>
+          <p class="featured-summary">{summary}</p>
+        </div>
       </div>
-    </div>
+    </a>
   )}
 
-  {/* ── Default grid card (/news listing) ──────────────── */}
+  {/* ── Portrait grid card (3-up grid on /news) ────────── */}
   {!compact && !featured && (
-    <>
-      {image && (
-        <a class="card-img-wrap" href={href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener' : undefined}>
-          <img src={image.src} alt={title} />
-        </a>
-      )}
+    <a class="card-link" {...linkProps}>
+      <div class="card-img-wrap">
+        {imgSrc
+          ? <img src={imgSrc} alt={altText} loading="lazy" />
+          : <div class="card-img-placeholder" />}
+      </div>
       <div class="card-body">
         <time datetime={date.toISOString()} class="date-pill">{monthYear}</time>
-        <h3 class="card-title">
-          <a href={href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener' : undefined}>
-            {title}
-          </a>
-        </h3>
+        <h3 class="card-title">{title}</h3>
         <p class="card-summary">{summary}</p>
-        <a class="read-link" href={href} target={isExternal ? '_blank' : undefined} rel={isExternal ? 'noopener' : undefined}>
-          Read Article
-        </a>
       </div>
-    </>
+    </a>
   )}
 
 </article>
 
 <style>
-  /* ══ COMPACT (home hero) ════════════════════════════════════ */
+  /* ══ COMPACT (home hero panel) ══════════════════════════════ */
   .news-card--compact {
     display: flex;
     gap: var(--space-4);
     align-items: flex-start;
     padding: var(--space-4);
     background: var(--color-bg-light);
-    border-radius: var(--radius-card);
+    border-radius: var(--radius-md);
   }
 
   .thumb-link { flex-shrink: 0; }
@@ -110,103 +100,146 @@ const monthYear = date.toLocaleDateString('en-CA', { year: 'numeric', month: 'sh
   .news-card--compact .news-body { flex: 1; min-width: 0; }
 
   .news-card--compact .title {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 700;
-    margin-bottom: var(--space-1);
-    color: #0f172a;
+    margin: 0 0 var(--space-1);
+    line-height: 1.35;
   }
 
+  .news-card--compact .title a {
+    color: var(--color-text-on-white);
+    text-decoration: none;
+  }
+  .news-card--compact .title a:hover { color: var(--color-link); }
+
   .news-card--compact .summary {
-    font-size: 0.85rem;
-    margin-bottom: var(--space-2);
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: rgba(4, 23, 38, 0.65);
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    color: rgba(15, 23, 42, 0.65);
+    margin: 0;
   }
 
-  /* ══ FEATURED ════════════════════════════════════════════════ */
+  /* ══ FEATURED HERO CARD ══════════════════════════════════════ */
   .news-card--featured {
-    background: #ffffff;
     border-radius: var(--radius-card);
     overflow: hidden;
-    border-top: 4px solid var(--color-accent);
+    background: var(--color-bg-dark);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
+  }
+
+  .featured-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
   }
 
   .featured-inner {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.1fr 1fr;
+    min-height: 340px;
   }
 
-  .featured-img-wrap {
-    display: block;
+  .featured-img-side {
     overflow: hidden;
-    min-height: 280px;
+    position: relative;
   }
 
-  .featured-img-wrap img {
+  .featured-img-side img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.3s;
+    transition: transform 0.4s ease;
   }
 
-  .featured-img-wrap:hover img { transform: scale(1.03); }
+  .featured-link:hover .featured-img-side img {
+    transform: scale(1.04);
+  }
+
+  .featured-img-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--color-link) 0%, #041726 100%);
+  }
 
   .featured-body {
-    padding: var(--space-8);
+    padding: var(--space-10) var(--space-8);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-left: 1px solid rgba(15, 23, 42, 0.06);
+    gap: var(--space-4);
+    border-left: 3px solid var(--color-accent);
   }
 
   .featured-title {
-    margin: var(--space-3) 0 var(--space-3);
-    font-size: 1.35rem;
+    margin: 0;
+    font-size: clamp(1.25rem, 2.5vw, 1.7rem);
     font-weight: 800;
-    line-height: 1.3;
+    line-height: 1.25;
+    color: var(--color-text-on-dark);
+    transition: color 0.2s;
   }
 
-  .featured-title a { color: #0f172a; text-decoration: none; }
-  .featured-title a:hover { color: var(--color-link); }
+  .featured-link:hover .featured-title { color: var(--color-accent); }
 
   .featured-summary {
+    margin: 0;
     font-size: 0.92rem;
-    line-height: 1.6;
-    color: rgba(15, 23, 42, 0.65);
-    margin: 0 0 var(--space-5);
-    flex: 1;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.65);
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   @media (max-width: 700px) {
-    .featured-inner { grid-template-columns: 1fr; }
-    .featured-img-wrap { min-height: 200px; }
-    .featured-body { border-left: none; border-top: 1px solid rgba(15, 23, 42, 0.06); }
+    .featured-inner {
+      grid-template-columns: 1fr;
+      min-height: auto;
+    }
+    .featured-img-side { height: 220px; }
+    .featured-body {
+      border-left: none;
+      border-top: 3px solid var(--color-accent);
+      padding: var(--space-6);
+    }
   }
 
-  /* ══ DEFAULT GRID CARD ═══════════════════════════════════════ */
+  /* ══ PORTRAIT GRID CARD ══════════════════════════════════════ */
   .news-card:not(.news-card--compact):not(.news-card--featured) {
-    background: #ffffff;
     border-radius: var(--radius-card);
     overflow: hidden;
+    background: #ffffff;
     display: flex;
     flex-direction: column;
-    border-top: 4px solid var(--color-accent);
-    transition: transform 0.2s;
+    height: 100%;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, box-shadow 0.2s;
   }
 
   .news-card:not(.news-card--compact):not(.news-card--featured):hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(4, 23, 38, 0.12);
+  }
+
+  .card-link {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    text-decoration: none;
+    color: inherit;
   }
 
   .card-img-wrap {
-    display: block;
     overflow: hidden;
-    height: 180px;
+    height: 195px;
     flex-shrink: 0;
+    background: var(--color-bg-panel);
   }
 
   .card-img-wrap img {
@@ -214,33 +247,45 @@ const monthYear = date.toLocaleDateString('en-CA', { year: 'numeric', month: 'sh
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.3s;
+    transition: transform 0.35s ease;
   }
 
-  .card-img-wrap:hover img { transform: scale(1.04); }
+  .news-card:not(.news-card--compact):not(.news-card--featured):hover .card-img-wrap img {
+    transform: scale(1.05);
+  }
+
+  .card-img-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--color-link) 0%, #d3e5e9 100%);
+  }
 
   .card-body {
-    padding: var(--space-5) var(--space-6);
+    padding: var(--space-5) var(--space-6) var(--space-6);
     display: flex;
     flex-direction: column;
     flex: 1;
+    border-top: 4px solid var(--color-accent);
   }
 
   .card-title {
-    margin: var(--space-2) 0 var(--space-2);
+    margin: var(--space-3) 0 var(--space-2);
     font-size: 1rem;
     font-weight: 700;
     line-height: 1.4;
+    color: var(--color-text-on-white);
+    transition: color 0.2s;
   }
 
-  .card-title a { color: #0f172a; text-decoration: none; }
-  .card-title a:hover { color: var(--color-link); }
+  .news-card:not(.news-card--compact):not(.news-card--featured):hover .card-title {
+    color: var(--color-link);
+  }
 
   .card-summary {
-    font-size: 0.85rem;
+    margin: 0;
+    font-size: 0.84rem;
     line-height: 1.55;
-    color: rgba(15, 23, 42, 0.6);
-    margin: 0 0 var(--space-4);
+    color: rgba(4, 23, 38, 0.6);
     flex: 1;
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -251,15 +296,14 @@ const monthYear = date.toLocaleDateString('en-CA', { year: 'numeric', month: 'sh
   /* ══ SHARED ══════════════════════════════════════════════════ */
   .date-pill {
     display: inline-block;
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 700;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
     background: var(--color-accent);
-    color: #0f172a;
-    padding: 0.2rem 0.6rem;
+    color: #041726;
+    padding: 0.2rem 0.65rem;
     border-radius: var(--radius-full);
+    width: fit-content;
   }
-
-  /* .read-link global in Layout.astro */
 </style>

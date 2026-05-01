@@ -142,9 +142,10 @@ const projects = defineCollection({
 // NEWS
 // One .md file per news item in src/content/news/
 // ── Image field ──
-// Set `image` to any public URL (e.g. https://…/photo.jpg) or a
-// root-relative path to a file in /public (e.g. /images/news/cover.jpg).
-// Leave blank if there is no image.
+// Drop a cover image (jpg, png, webp, etc.) into the same folder as
+// index.md and reference it as a relative path, e.g.:
+//   image: ./cover.jpg
+// Astro will optimise and fingerprint it automatically.
 // ── Featured flag ──
 // Set `featured: true` on exactly ONE item to make it the big hero
 // card at the top of /news.  If none is flagged the most-recent item
@@ -152,19 +153,20 @@ const projects = defineCollection({
 // ------------------------------------------------------------------
 const news = defineCollection({
   loader: glob({ base: './src/content/news', pattern: '**/*.{md,mdx}' }),
-  schema: z.object({
-    title: z.string(),
-    date: z.coerce.date(),
-    summary: z.string(),
-    // Any public image URL or root-relative /public path
-    image: z.string().optional(),
-    imageAlt: z.string().optional(),
-    externalUrl: z.string().url().optional(),
-    tags: z.array(z.string()).default([]),
-    // Flag exactly one item as the big hero card on the news page
-    featured: z.boolean().default(false),
-    draft: z.boolean().default(false),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      date: z.coerce.date(),
+      summary: z.string(),
+      // Local image file relative to this content file (e.g. ./cover.jpg)
+      image: image().optional(),
+      imageAlt: z.string().optional(),
+      externalUrl: z.string().url().optional(),
+      tags: z.array(z.string()).default([]),
+      // Flag exactly one item as the big hero card on the news page
+      featured: z.boolean().default(false),
+      draft: z.boolean().default(false),
+    }),
 });
 
 export const collections = { site, team, publications, projects, news };

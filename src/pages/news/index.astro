@@ -8,29 +8,30 @@ import { getCollection } from 'astro:content';
 const allNews = (await getCollection('news', n => !n.data.draft))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
-const featured  = allNews[0];
-const remaining = allNews.slice(1);
+// Use the item flagged featured: true as the hero; fall back to most-recent
+const featured  = allNews.find(n => n.data.featured) ?? allNews[0];
+const remaining = allNews.filter(n => n !== featured);
 ---
 
 <Layout title="News" description="Latest news and updates from the FORT Lab.">
 
   <PageHero eyebrow="Latest Updates" title="News" />
 
-  <div class="content surface-light">
+  <div class="content">
     <div class="section-inner">
 
       {allNews.length === 0 && <EmptyState />}
 
       {featured && (
         <div class="featured-wrap">
-          <p class="section-tag">Featured</p>
+          <p class="section-label">Featured</p>
           <NewsCard item={featured} featured />
         </div>
       )}
 
       {remaining.length > 0 && (
         <div class="grid-wrap">
-          {featured && <p class="section-tag">More News</p>}
+          <p class="grid-label">Latest News</p>
           <div class="news-grid">
             {remaining.map(item => <NewsCard item={item} />)}
           </div>
@@ -44,12 +45,16 @@ const remaining = allNews.slice(1);
 
 <style>
   .content {
-    background: #f8fafc;
-    padding: var(--space-12) 0;
+    background: #eef3f5;
+    padding: var(--space-2) 0 var(--space-16);
   }
 
-  .section-tag {
-    font-size: 0.7rem;
+  .featured-wrap {
+    margin-bottom: var(--space-12);
+  }
+
+  .section-label {
+    font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -57,19 +62,27 @@ const remaining = allNews.slice(1);
     margin: 0 0 var(--space-4);
   }
 
-  .featured-wrap {
-    margin-bottom: var(--space-12);
+  .grid-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-link);
+    margin: 0 0 var(--space-5);
   }
-
-  .grid-wrap {}
 
   .news-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--space-6);
+    align-items: stretch;
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 900px) {
+    .news-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 560px) {
     .news-grid { grid-template-columns: 1fr; }
   }
 </style>
