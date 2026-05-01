@@ -1,6 +1,7 @@
 ---
 draft: false
 name: "Jaylin Auger-LaFleur"
+photo: ./photo.jpeg
 role: "Undergraduate Student"
 degree: "BSc Computing Science - Artificial Intelligence"
 startDate: "January 2025"
