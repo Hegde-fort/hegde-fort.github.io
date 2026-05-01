@@ -14,7 +14,6 @@ const navLinks = [
   { label: 'Home',         href: '/' },
   { label: 'About',        href: '/about' },
   { label: 'Team',         href: '/team' },
-  { label: 'Projects',     href: '/projects' },
   { label: 'Publications', href: '/publications' },
   { label: 'News',         href: '/news' },
 ];
@@ -121,8 +120,9 @@ const navLinks = [
     padding: 0;
     list-style: none;
     display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6);
   }
 
   .nav-list a {
