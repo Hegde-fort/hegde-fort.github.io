@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 
@@ -33,7 +34,7 @@ const formattedDate = date.toLocaleDateString('en-CA', {
     </header>
 
     {image && (
-      <img class="hero-image" src={image.src} alt={imageAlt || title} />
+      <Image class="hero-image" src={image} alt={imageAlt || title} />
     )}
 
     <div class="article-body">

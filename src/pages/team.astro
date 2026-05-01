@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import TeamCard from '../components/TeamCard.astro';
 import EmptyState from '../components/EmptyState.astro';
@@ -65,7 +66,7 @@ const teamHeading = lab.teamPage?.heading ?? `Meet the ${lab.shortName ?? lab.na
     <div class="photo-strip">
       {heroPhotos.map((p, i) => (
         <div class:list={['photo-frame', `photo-frame--${i}`]}>
-          <img src={p.src} alt={p.alt} />
+          <Image src={p.src} alt={p.alt} width={560} height={400} />
         </div>
       ))}
     </div>

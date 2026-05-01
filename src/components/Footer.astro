@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+
 interface Props {
   labName: string;
   affiliations: string[];
@@ -23,7 +25,7 @@ const navLinks = (nav ?? defaultLinks).filter(l => !l.hidden);
   <!-- Stamp icon straddling the dark section above and white footer -->
   <div class="stamp-wrap">
     <div class="stamp">
-      <img src="/FORTLogo.png" alt={labName + ' logo'} />
+      <Image src="/FORTLogo.png" alt={labName + ' logo'} width={80} height={80} />
     </div>
   </div>
 

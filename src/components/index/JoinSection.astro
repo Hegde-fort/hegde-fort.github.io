@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import Button from '../Button.astro';
 import { getEntry } from 'astro:content';
 
@@ -19,9 +20,11 @@ const lab = (await getEntry('site', 'lab'))!.data;
 
     {lab.joining.photo && (
       <div class="photo-frame">
-        <img
+        <Image
           src={lab.joining.photo.src}
           alt={lab.joining.photo.alt}
+          width={800}
+          height={600}
         />
       </div>
     )}

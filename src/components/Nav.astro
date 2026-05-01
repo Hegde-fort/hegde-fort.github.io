@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { getEntry } from 'astro:content';
 
 interface Props {
@@ -25,7 +26,7 @@ const currentPath = Astro.url.pathname;
 <div class="nav-wrapper">
   <nav>
     <a class="nav-logo" href="/">
-      <img src="/FORTLogo.png" alt={labName} class="nav-logo-img" />
+      <Image src="/FORTLogo.png" alt={labName} class="nav-logo-img" width={80} height={80} loading="eager" />
       <span>{labName}</span>
     </a>
 
