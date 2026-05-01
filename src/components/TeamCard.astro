@@ -155,4 +155,9 @@ const profileSlug = member.id.replace(/\/index$/, '');
   }
 
   .link-icon svg { width: 14px; height: 14px; }
+
+  @media (max-width: 640px) {
+    .team-card--default .photo-wrap { width: 96px; height: 96px; }
+    .team-card { grid-template-columns: 96px 1fr; }
+  }
 </style>
