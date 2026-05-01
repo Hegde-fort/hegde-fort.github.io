@@ -46,7 +46,7 @@ const ogImageURL   = ogImage ?? new URL('/FORTLogo.png', Astro.site).href;
     <link rel="icon" type="image/png" href="/FORTLogo.png" />
   </head>
   <body>
-    <Nav labName={lab.name} />
+    <Nav labName={lab.shortName ?? lab.name} />
     <main>
       <slot />
     </main>
