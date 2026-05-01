@@ -41,14 +41,14 @@ affiliations:
 # ── Joining section (shown on the home page) ──────────────────
 joining:
   headline: "Interested In Joining Our Team?"
-  blurb: "TODO: short blurb about what you look for in prospective students/researchers."
+  blurb: "We welcome motivated students and researchers who are excited about making machine learning more private, fair, and robust. We look for people with a strong interest in theory and algorithms, and a drive to tackle problems that are both practically relevant and underexplored in the literature. If that sounds like you, visit our About page to get in touch."
   photo:
     src: "/images/teamPhotos/Summer2022_teamlunch.jpg"
     alt: "FORT Lab team lunch, Summer 2022"
 
 # ── Contact (shown on the About page) ─────────────────────────
 contact:
-  address: "TODO"
+  address: "Department of Computing Science, University of Alberta, Edmonton, Alberta, Canada"
   officeHours: ""
 
 # ── Team page ─────────────────────────────────────────────────
