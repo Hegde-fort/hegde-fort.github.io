@@ -5,7 +5,7 @@ import { getCollection, getEntry } from 'astro:content';
 
 const lab = (await getEntry('site', 'lab'))!.data;
 
-const featuredNews = (await getCollection('news', n => !n.data.draft && n.data.featured))
+const featuredNews = (await getCollection('news', n => !n.data.draft))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
   .slice(0, 3);
 ---
