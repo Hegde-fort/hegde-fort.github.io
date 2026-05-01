@@ -5,13 +5,17 @@ interface Props {
   /** Stretches to full container width and uses pill radius */
   fullWidth?: boolean;
   class?: string;
+  target?: '_blank' | '_self';
 }
 
-const { href, variant = 'solid', fullWidth = false, class: className } = Astro.props;
+const { href, variant = 'solid', fullWidth = false, class: className, target } = Astro.props;
+const rel = target === '_blank' ? 'noopener noreferrer' : undefined;
 ---
 
 <a
   href={href}
+  target={target}
+  rel={rel}
   class:list={[
     variant === 'solid' ? 'btn' : 'btn-outline',
     { 'btn--full': fullWidth },
