@@ -10,6 +10,6 @@ alumni: true
 projects:
   - title: "Fair Farm"
     description: "A top-down farm management educational game built in Unity (C#) that teaches players about fairness and bias in machine learning. Engineered dynamic farm systems, interaction mechanics, and inventory systems from scratch."
-  - title: "FORT Lab Website Redesign"
+  - title: "FORT Lab Website 2023 Redesign"
     description: "Redesigned the existing lab website to modern MaterialUI standards; built responsive, accessible, and dynamic web pages using HTML, CSS, and JavaScript."
 ---
