@@ -88,15 +88,9 @@ const heroPhotos = [
         <section class="role-section">
           <h2 class="role-heading">{ROLE_LABELS_PLURAL[role] ?? role}</h2>
           <div class="group-box">
-            {role === 'Faculty' ? (
-              <div class="faculty-grid">
-                {members.map(m => <TeamCard member={m} size="large" />)}
-              </div>
-            ) : (
-              <div class="member-grid">
-                {members.map(m => <TeamCard member={m} />)}
-              </div>
-            )}
+            <div class="member-grid">
+              {members.map(m => <TeamCard member={m} />)}
+            </div>
           </div>
         </section>
       ))}
@@ -219,14 +213,6 @@ const heroPhotos = [
     background: #ffffff;
   }
 
-  /* Faculty — centered single or pair */
-  .faculty-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 560px));
-    justify-content: center;
-    gap: var(--space-6);
-  }
-
   /* All other roles — 2-column responsive grid */
   .member-grid {
     display: grid;
@@ -259,5 +245,9 @@ const heroPhotos = [
     .photo-frame--0,
     .photo-frame--2 { display: none; }
     .photo-frame--1 { width: 100%; max-width: 320px; height: 220px; transform: none; }
+
+    .group-box { padding: var(--space-4); }
+    .member-grid { grid-template-columns: 1fr; }
+    .role-heading { font-size: 1.1rem; }
   }
 </style>

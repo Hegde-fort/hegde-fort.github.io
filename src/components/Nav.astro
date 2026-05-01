@@ -40,7 +40,7 @@ const currentPath = Astro.url.pathname;
         <li>
           <a
             href={href}
-            class:list={['nav-link', { active: currentPath.startsWith(href) }]}
+            class:list={['nav-link', { active: href === '/' ? currentPath === '/' : currentPath.startsWith(href) }]}
           >
             {label}
           </a>
@@ -186,28 +186,49 @@ const currentPath = Astro.url.pathname;
 </style>
 
 <script>
-  const nav = document.querySelector('.nav-wrapper') as HTMLElement;
-  const hamburger = document.querySelector('.hamburger') as HTMLButtonElement;
-  const mobileMenu = document.getElementById('mobile-menu') as HTMLElement;
+  function initNav() {
+    const nav = document.querySelector('.nav-wrapper') as HTMLElement | null;
+    const hamburger = document.querySelector('.hamburger') as HTMLButtonElement | null;
+    const mobileMenu = document.getElementById('mobile-menu') as HTMLElement | null;
 
-  // Scroll-based frosted glass
-  function updateScroll() {
-    nav.classList.toggle('scrolled', window.scrollY > 20);
-  }
-  updateScroll();
-  window.addEventListener('scroll', updateScroll, { passive: true });
+    if (!nav || !hamburger || !mobileMenu) return;
 
-  // Hamburger toggle
-  hamburger.addEventListener('click', () => {
-    const isOpen = mobileMenu.classList.toggle('open');
-    hamburger.setAttribute('aria-expanded', String(isOpen));
-  });
+    // Scroll-based frosted glass
+    function updateScroll() {
+      nav!.classList.toggle('scrolled', window.scrollY > 20);
+    }
+    updateScroll();
+    window.addEventListener('scroll', updateScroll, { passive: true });
 
-  // Close menu when a link is clicked
-  mobileMenu.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      mobileMenu.classList.remove('open');
-      hamburger.setAttribute('aria-expanded', 'false');
+    function closeMenu() {
+      mobileMenu!.classList.remove('open');
+      hamburger!.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    function openMenu() {
+      mobileMenu!.classList.add('open');
+      hamburger!.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Hamburger toggle
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.contains('open');
+      isOpen ? closeMenu() : openMenu();
     });
-  });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
+    });
+
+    // Close menu when a link is clicked
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+  }
+
+  initNav();
+  document.addEventListener('astro:after-swap', initNav);
 </script>

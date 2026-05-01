@@ -84,7 +84,12 @@ const profileSlug = member.id.replace(/\/index$/, '');
   .photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
   /* info */
-  .info { flex: 1; min-width: 0; }
+  .info {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
 
   .name {
     margin: 0 0 0.15rem;
@@ -157,7 +162,11 @@ const profileSlug = member.id.replace(/\/index$/, '');
   .link-icon svg { width: 14px; height: 14px; }
 
   @media (max-width: 640px) {
-    .team-card--default .photo-wrap { width: 96px; height: 96px; }
-    .team-card { grid-template-columns: 96px 1fr; }
+    .team-card {
+      grid-template-columns: 80px 1fr;
+      gap: var(--space-3);
+    }
+    .team-card--default .photo-wrap { width: 80px; height: 80px; }
+    .team-card--large   .photo-wrap { width: 80px; height: 80px; font-size: 1.2rem; }
   }
 </style>

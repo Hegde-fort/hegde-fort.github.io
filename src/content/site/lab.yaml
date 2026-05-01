@@ -50,6 +50,8 @@ contact:
 # ── Nav pages ─────────────────────────────────────────────────
 # Set hidden: true on any entry to remove it from the navbar.
 nav:
+  - label: "Home"
+    href: "/"
   - label: "About Us"
     href: "/about"
   - label: "Team"

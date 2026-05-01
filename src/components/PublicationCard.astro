@@ -69,4 +69,10 @@ const { title, authors, venue, year, url } = pub.data;
   }
 
   /* .read-link global in Layout.astro */
+
+  @media (max-width: 640px) {
+    .pub-card {
+      padding: var(--space-4) var(--space-6);
+    }
+  }
 </style>

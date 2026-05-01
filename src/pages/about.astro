@@ -17,11 +17,6 @@ const paragraphs = lab.about.mission?.trim().split('\n\n').map(p => p.trim()) ??
         {lab.about.heroHeadline ?? lab.description}
       </h1>
       {paragraphs.map(p => <p class="hero-body">{p}</p>)}
-      <div class="hero-arrow" aria-hidden="true">
-        <svg width="28" height="18" viewBox="0 0 28 18" fill="none">
-          <path d="M2 2l12 13L26 2" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
     </div>
   </section>
 
@@ -98,13 +93,6 @@ const paragraphs = lab.about.mission?.trim().split('\n\n').map(p => p.trim()) ??
     line-height: 1.75;
     color: rgba(255, 255, 255, 0.6);
     margin: 0 0 var(--space-3);
-  }
-
-  .hero-arrow {
-    margin-top: var(--space-8);
-    color: var(--color-accent);
-    display: flex;
-    justify-content: flex-start;
   }
 
   /* research themes */

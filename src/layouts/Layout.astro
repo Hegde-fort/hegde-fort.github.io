@@ -104,6 +104,18 @@ const ogImageURL   = ogImage ?? new URL('/FORTLogo.png', Astro.site).href;
     padding: var(--space-16) var(--content-pad-x);
   }
 
+  @media (max-width: 700px) {
+    .section-inner {
+      padding-top: var(--space-10);
+      padding-bottom: var(--space-10);
+    }
+  }
+
+  /* Prevent any component from causing horizontal scroll */
+  body {
+    overflow-x: hidden;
+  }
+
   /* ── Light surface context ─────────────────────────────────── */
   /* Apply .surface-light to any wrapper on a white/light bg.
      All CSS var tokens and link styles cascade to children. */
