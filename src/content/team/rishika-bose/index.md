@@ -1,6 +1,7 @@
 ---
 draft: false
 name: "Rishika Bose"
+photo: ./photo.jpeg
 role: "Master's Student"
 degree: "MSc Computing Science"
 startDate: "September 2025"

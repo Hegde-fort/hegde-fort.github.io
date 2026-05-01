@@ -1,6 +1,7 @@
 ---
 draft: false
 name: "Liam Peet-Pare"
+photo: ./photo.jpeg
 role: "Master's Student"
 startDate: "2020"
 endDate: "2022"
